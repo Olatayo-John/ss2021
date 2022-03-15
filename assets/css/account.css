@@ -1,0 +1,40 @@
+body{
+	background-image: url('../../assets/images/indian-nature-2.jpg');
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+label{
+	color: #294a63;
+    font-weight: bold;
+}
+.total-column {
+    word-break: break-all;
+    text-align: center;
+}
+.panel_s {
+	margin-bottom: 0 !important;
+    border: none;
+    -webkit-box-shadow: 0 1px 15px 1px rgb(90 90 90 / 8%);
+    box-shadow: 0 1px 15px 1px rgb(90 90 90 / 8%);
+}
+.panel-body {
+    background: #f9fafc;
+    padding: 10px 5px;
+	border: 1px solid #dce1ef;
+	color:#294a63;
+}
+h5{
+	font-weight: bold;
+}
+h3._total {
+    font-weight: bold;
+    /* margin: 0; */
+    margin: 10px 0;
+    font-size: 20px;
+	color:#294a63;
+	/* color: #000; */
+}
+.total-column span {
+    word-break: break-word;
+}

@@ -1,0 +1,13 @@
+body{
+	background-color: gray;
+}
+.wrapper_div{
+	/*border: 2px solid red;*/
+	margin-top: 100px;
+}
+.form_wrapper{
+	padding: 10px;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 10px 10px 10px black
+}

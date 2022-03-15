@@ -1,0 +1,53 @@
+body{
+	background-image: url('../../assets/images/indian-nature-2.jpg');
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+input.form-control:focus,textarea.form-control:focus{
+	border-color: #294a63;
+	box-shadow: none;
+}
+label{
+	color: #294a63;
+}
+
+.row i{
+	margin: auto 0
+}
+
+i.fab{
+	font-size: 20px;
+	cursor: pointer;
+	padding: 10px
+}
+i.fab:hover{
+	background-color: white;
+	border-radius: 50%;
+}
+div.row{
+	color: black;
+	margin-bottom: 5px;
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+	color:#294a63;
+}
+span{
+	color:#294a63;
+}
+
+@media only screen and (max-width: 500px) {
+	.col-md-4{
+		width: 150px;
+	}
+	div.nktechdetails{
+		margin-top: 40px;
+		margin-bottom: 40px;
+	}
+}
+@media only screen and (max-width: 768px) {
+	div.rowofwhole{
+		margin-bottom: 40px;
+	}
+}

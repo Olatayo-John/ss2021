@@ -1,0 +1,46 @@
+body{
+	background-image: url('../../assets/images/indian-nature-2.jpg');
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+button.btn{
+	border-radius:0;
+}
+form.gen_link_form{
+	display: all;
+}
+form.sms_gen_link_form{
+	display: none;
+}
+label{
+	font-weight: bolder;
+	color: #294a63;
+}
+button.genlinkbtn{
+	display: none;
+	/* visibility: hidden; */
+}
+input.form-control:focus,textarea.form-control:focus{
+	border-color: black;
+	box-shadow: none;
+}
+@media only screen and (max-width: 540px) {
+	div.import,div.sms_import{
+	 display: flex;
+	 flex-direction: column;
+	}
+	button.importemail,button.smsimport{
+		margin: 10px 0;
+	}
+}
+@media only screen and (max-width: 767px) {
+	form.gen_link_form,form.sms_gen_link_form{
+	 margin-top: 50px;
+	}
+	div.sendlinkdiv{
+		text-align: center;
+		border-radius: 0;
+		margin-bottom: 40px;
+	}
+}

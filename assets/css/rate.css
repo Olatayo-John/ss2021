@@ -1,0 +1,23 @@
+body{
+	/* background-image: url('../../assets/images/dark-pink-.jpg'); */
+	background-color:black !important;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+div.container{
+	padding: 20px;
+	margin: 50px auto;
+	background-color: #EEEEEE
+}
+div.submit{
+	text-align: center;
+	display: none;
+	margin-top: 50px;
+}
+label{
+	font-weight: bolder;
+}
+span.err{
+	display: none;
+}

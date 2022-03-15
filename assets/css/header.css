@@ -1,0 +1,159 @@
+*{
+	font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+input.form-control:focus{
+	border-color: #294a63;
+	box-shadow: none;
+}
+div.spinnerdiv{
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: .9;
+	z-index: 99999;
+	position: fixed;
+	background: #000000;
+	background: -webkit-linear-gradient(to right, #434343, #000000);
+	background: linear-gradient(to right, #434343, #000000);
+
+}
+div.spinner-border{
+	position: absolute;
+	top: 50%;
+	left:50%;
+	width: 6rem;
+	height: 6rem;
+	font-weight: bolder;
+}
+nav{
+	background-image: url('../images/SwachhHeader.jpg');
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-color: white;
+}
+div.alert button.close{
+	margin-left: 20px;
+	outline: none;
+}
+div.alert button.close:hover{
+	font-weight: bolder;
+}
+div.alert{
+	position: fixed;
+	border-radius: 0;
+	position: fixed;
+	right: 0;
+	margin-right: 10px;
+	z-index: 555;
+	animation-name: alert;
+	animation-fill-mode: forwards;
+	animation-duration: 2s;
+}
+@keyframes alert{
+	0%{
+		opacity: 0;
+	}
+	50%{
+		opacity: 0.5;
+	}
+	100%{
+		opacity: 1;
+	}
+}
+div.side-nav{
+	background: #F57C00; 
+	background: -webkit-linear-gradient(to right,#F57C00, #EF6C00);
+	background: linear-gradient(to right, #F57C00, #EF6C00); 
+	position: fixed;
+	overflow-x: hidden;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	height: 100vh;
+	width: 0;
+	padding-top: 70px;
+	transition: 0.1s;
+	border-radius: 0;
+}
+div ul.side-nav-ul{
+	padding: 0;
+}
+div ul.side-nav-ul li{
+	list-style-type: none;
+	font-weight: bolder;
+}
+div ul.side-nav-ul li a.nav-link{
+	padding: 15px 20px;
+	display: block;
+	color: white;
+	font-size: 14px;
+	list-style-type: none;
+	text-transform: uppercase;
+}
+li a i.fas,li a i.fab{
+	color: white;
+	margin: 0px 10px;
+	font-size: 17px;
+}
+div ul li a.nav-link:hover{
+	background-color: #0B3954;
+	width: 100%;
+}
+a.closex{
+	color: white;
+	top: 6px;
+	right: 20px;
+	position: absolute; 
+	font-size: 35px;
+}
+a.closex:hover{
+	color: #D50000;
+	font-weight: bolder;
+	text-decoration: none;
+	transform: scale(0.9);
+	transition: transform .2s;
+}
+button.menubtn{
+	font-size: 15px;
+	cursor: pointer;
+	outline: none;
+	border: none;
+}
+@media only screen and (min-width: 500px) {
+	nav{
+		height: 50px;
+	}
+}
+@media only screen and (min-width: 705px) {
+	nav{
+		height: 60px;
+	}
+}
+@media only screen and (min-width: 845px) {
+	nav{
+		height: 75px;
+	}
+}
+@media only screen and (min-width: 975px) {
+	nav{
+		height: 75px;
+	}
+}
+@media only screen and (min-width: 1040px) {
+	nav{
+		height: 85px;
+	}
+}
+@media only screen and (min-width: 1170px) {
+	nav{
+		height: 90px;
+	}
+}
+@media only screen and (min-width: 1240px) {
+	nav{
+		height: 100px;
+	}
+}
