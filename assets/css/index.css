@@ -7,11 +7,11 @@ body{
 button.btn{
 	border-radius:0;
 }
-form.gen_link_form{
-	display: all;
+form.gen_link_form,button.sndasmailbtn{
+	display: none;
 }
 form.sms_gen_link_form{
-	display: none;
+	display: all;
 }
 label{
 	font-weight: bolder;

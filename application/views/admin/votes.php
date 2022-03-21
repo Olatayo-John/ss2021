@@ -143,7 +143,7 @@
 
 				<th data-field="SMS" data-sortable="true">SMS</th>
 
-				<th data-field="Email" data-sortable="true">Email</th>
+				<!-- <th data-field="Email" data-sortable="true">Email</th> -->
 
 				<th data-field="Votes" data-sortable="true">Votes</th>
 			</tr>
@@ -153,7 +153,7 @@
 				<tr class="text-dark">
 					<td class><?php echo $info['name'] ?></td>
 					<td class><?php echo $info['sms'] ?></td>
-					<td class><?php echo $info['email'] ?></td>
+					<!-- <td class><?php echo $info['email'] ?></td> -->
 					<td><?php echo $info['total_links'] ?></td>
 					</td>
 				</tr>

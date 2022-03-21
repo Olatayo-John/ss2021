@@ -944,7 +944,11 @@ class User extends CI_Controller
 				$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
 				$j_cres = json_decode($cres, true);
 
-				if ($httpCode !== 200) {
+				if ($httpCode == 500) {
+					$data['status'] = false;
+					$data['msg'] = "Internal Server Error";
+				}
+				else if ($httpCode !== 200) {
 					$data['status'] = false;
 					$data['msg'] = "Check for OTP or Resend";
 				} else {
@@ -1025,8 +1029,11 @@ class User extends CI_Controller
 			$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
 			$j_cres = json_decode($cres, true);
 
-
-			if ($httpCode !== 200) {
+			if ($httpCode == 500) {
+				$data['status'] = false;
+				$data['msg'] = "Internal Server Error";
+			}
+			else if ($httpCode !== 200) {
 				$data['status'] = false;
 				$data['msg'] = ($j_cres['message']) ? $j_cres['message'] : "";
 			} else {

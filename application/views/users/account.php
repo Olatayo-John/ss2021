@@ -49,23 +49,23 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
+			<!-- <div class="col-lg-4 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
 						<h3 class="_total"><?php echo $all_email[0]->email ?></h3>
 						<span>Emails</span>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
-		<label class="pl-3">Ratings</label>
+		<label class="pl-3">Feedbacks</label>
 		<div class="row col-md-12 m-0 p-0 pb-5">
 			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
 						<h3 class="_total"><?php echo ($tr) ?></h3>
-						<span>Ratings</span>
+						<span>Feedbacks</span>
 					</div>
 				</div>
 			</div>

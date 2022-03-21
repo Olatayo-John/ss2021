@@ -171,7 +171,7 @@
 				$('.link_for').val('Swachh Survekshan');
 				$(".bdy").load("<?php echo base_url("body.txt"); ?>");
 				$(".smsbdy").load("<?php echo base_url("body.txt"); ?>");
-				$('.gen_link_form').show();
+				$('.gen_link_form').hide();
 				$('.sndasbtngrp').show();
 				$('.genlinkbtn').attr('disabled');
 				$('.genlinkbtn').html('Generated');
