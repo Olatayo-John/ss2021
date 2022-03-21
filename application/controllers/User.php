@@ -810,7 +810,8 @@ class User extends CI_Controller
 			$form_key = $this->get_key($key);
 			if ($form_key !== $key) {
 				//redirect($_SERVER['HTTP_REFERER']);
-				exit();
+				echo "Invalid Link";
+				die;
 			} elseif ($form_key == $key) {
 				$data['form_key'] = $form_key;
 				// $this->load->view('users/star_rate', $data);

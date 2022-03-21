@@ -139,9 +139,10 @@ class Usermodel extends CI_Model
 		}
 	}
 
-	public function downloadApp(){
+	public function downloadApp()
+	{
 		$data = array(
-			'ip'=>$_SERVER['REMOTE_ADDR'],
+			'ip' => $_SERVER['REMOTE_ADDR'],
 		);
 		$this->db->insert('apphit', $data);
 		return true;
@@ -315,13 +316,15 @@ class Usermodel extends CI_Model
 	public function get_key($key)
 	{
 		$query = $this->db->get_where('users', array("form_key" => $key))->row();
-		return $query->form_key;
+		if ($query) {
+			return $query->form_key;
+		}
 	}
 
 	public function save_questions($key)
 	{
 		$data = array(
-			'form_key'=>$key,
+			'form_key' => $key,
 			'q_one' => htmlentities($this->input->post('ques_one')),
 			'q_two' => htmlentities($this->input->post('ques_two')),
 			'q_three' => htmlentities($this->input->post('ques_three')),
@@ -337,11 +340,12 @@ class Usermodel extends CI_Model
 		return TRUE;
 	}
 
-	public function mobileExist($mobile){
-		$query= $this->db->get_where("mainweb_rating",array('mobile'=>$mobile));
-		if($query->num_rows() > 0){
+	public function mobileExist($mobile)
+	{
+		$query = $this->db->get_where("mainweb_rating", array('mobile' => $mobile));
+		if ($query->num_rows() > 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -435,10 +439,10 @@ class Usermodel extends CI_Model
 
 	public function rating_store_UD($form_key)
 	{
-			$this->db->set('total_links', 'total_links+1', FALSE);
-			$this->db->where('form_key', $form_key);
-			$this->db->update('user_details');
-			return true;
-			exit;
+		$this->db->set('total_links', 'total_links+1', FALSE);
+		$this->db->where('form_key', $form_key);
+		$this->db->update('user_details');
+		return true;
+		exit;
 	}
 }

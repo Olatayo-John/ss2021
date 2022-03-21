@@ -48,6 +48,20 @@
 		</div>
 
 		<div class="form-group">
+			<label><span class="text-danger">* </span> Mobile</label>
+			<div class="input-group">
+				<input type="number" class="mobile form-control" name="mobile" placeholder="Mobile number" value="">
+				<div class="input-group-prepend genotp_i">
+					<div class="input-group-text p-0">
+						<button class="btn btn-info genotp_btn">Get OTP</button>
+					</div>
+				</div>
+			</div>
+			<span class="err e_mobile text-danger"></span>
+			<span class="succ s_mobile text-success"></span>
+		</div>
+
+		<div class="form-group">
 			<label>Name</label>
 			<div class="input-group">
 				<div class="input-group-prepend genotp_i">
@@ -77,7 +91,7 @@
 			</select>
 		</div>
 
-		<div class="form-group">
+		<!-- <div class="form-group">
 			<div class="row">
 				<div class="col-md-6">
 					<label><span class="text-danger">* </span> Mobile</label>
@@ -99,6 +113,13 @@
 					<span class="succ s_otp text-success"></span>
 				</div>
 			</div>
+		</div> -->
+
+		<div class="form-group">
+			<label><span class="text-danger">* </span> OTP</label>
+			<input type="number" id="otp" class="otp form-control" name="otp" value="">
+			<span class="err e_otp text-danger"></span>
+			<span class="succ s_otp text-success"></span>
 		</div>
 
 		<hr>
@@ -121,6 +142,71 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+
+		//onKeyup of mobile
+		$('.mobile').keyup(function() {
+			var csrfName = $('.csrf_token').attr('name');
+			var csrfHash = $('.csrf_token').val();
+			var mobile = $('.mobile').val();
+
+			if (mobile.length < 10 || mobile.length > 10) {
+				$('.mobile').css('border', '1px solid #dc3545');
+				$('.e_mobile').html("Invalid mobile length").show();
+				return false;
+			} else {
+				$('.e_mobile').hide();
+				$('.mobile').css('border', '1px solid #ced4da');
+
+				$.ajax({
+					url: "<?php echo base_url('generate-otp'); ?>",
+					method: "post",
+					data: {
+						[csrfName]: csrfHash,
+						mobile: mobile
+					},
+					dataType: "json",
+					beforeSend: function() {
+						$('.genotp_btn,.mobile').attr('disabled', 'readonly').css({
+							'cursor': 'not-allowed'
+						});
+
+						$('.genotp_btn').html("Generating OTP...");
+
+						$('.err,.succ').hide();
+						$('.form-control').css('border', '1px solid #ced4da');
+					},
+					success: function(res) {
+						if (res.status === true) {
+							$('.s_mobile').html(res.msg).show();
+						} else if (res.status === false) {
+							if (res.msg) {
+								$('.e_mobile').html(res.msg).show();
+							}
+							if (res.error) {
+								$('.e_mobile').html(res.error).show();
+							}
+						}
+
+						//reset
+						$('.mobile').delay(5000).removeAttr('disabled', 'readonly').css({
+							'cursor': 'text'
+						});
+
+						$('.genotp_btn').delay(5000).removeAttr('disabled', 'readonly').html("Get OTP").css({
+							'cursor': 'pointer'
+						});
+
+						$('.csrf_token').val(res.token);
+					},
+					error: function(res) {
+						alert('An error occured!');
+
+						// window.location.reload();
+					}
+
+				});
+			}
+		});
 
 		//gen otp
 		$(document).on('click', '.genotp_btn', function() {
@@ -151,9 +237,15 @@
 				},
 				dataType: "json",
 				beforeSend: function() {
-					$('.genotp_btn').attr('disabled', 'readonly').css({
+					// $('.genotp_btn').attr('disabled', 'readonly').css({
+					// 	'cursor': 'not-allowed'
+					// }).html("Generating OTP...");
+
+					$('.genotp_btn,.mobile').attr('disabled', 'readonly').css({
 						'cursor': 'not-allowed'
-					}).html("Generating OTP...");
+					});
+
+					$('.genotp_btn').html("Generating OTP...");
 
 					$('.err,.succ').hide();
 					$('.form-control').css('border', '1px solid #ced4da');
@@ -171,9 +263,17 @@
 					}
 
 					//reset otp_btn
-					$('.genotp_btn').delay(5000).removeAttr('disabled', 'readonly').css({
+					// $('.genotp_btn').delay(5000).removeAttr('disabled', 'readonly').css({
+					// 	'cursor': 'pointer'
+					// }).html("Get OTP");
+
+					$('.mobile').delay(5000).removeAttr('disabled', 'readonly').css({
+						'cursor': 'text'
+					});
+
+					$('.genotp_btn').delay(5000).removeAttr('disabled', 'readonly').html("Get OTP").css({
 						'cursor': 'pointer'
-					}).html("Get OTP");
+					});
 
 					$('.csrf_token').val(res.token);
 				},
@@ -207,6 +307,19 @@
 			var otp = $('.otp').val();
 			var starv = $('.starv').val();
 
+			if (mobile == "" || mobile == null || mobile == undefined) {
+				$('.mobile').css('border', '1px solid #dc3545');
+				return false;
+			}
+			if (mobile.length < 10 || mobile.length > 10) {
+				$('.mobile').css('border', '1px solid #dc3545');
+				$('.e_mobile').html("Invalid mobile length").show();
+				return false;
+			} else {
+				$('.e_mobile').hide();
+				$('.mobile').css('border', '1px solid #ced4da');
+			}
+
 			if (name == "" || name == null) {
 				$('.name').css('border', '1px solid #dc3545');
 				return false;
@@ -234,18 +347,18 @@
 				$('.sex').css('border', '1px solid #ced4da');
 			}
 
-			if (mobile == "" || mobile == null || mobile == undefined) {
-				$('.mobile').css('border', '1px solid #dc3545');
-				return false;
-			}
-			if (mobile.length < 10 || mobile.length > 10) {
-				$('.mobile').css('border', '1px solid #dc3545');
-				$('.e_mobile').html("Invalid mobile length").show();
-				return false;
-			} else {
-				$('.e_mobile').hide();
-				$('.mobile').css('border', '1px solid #ced4da');
-			}
+			// if (mobile == "" || mobile == null || mobile == undefined) {
+			// 	$('.mobile').css('border', '1px solid #dc3545');
+			// 	return false;
+			// }
+			// if (mobile.length < 10 || mobile.length > 10) {
+			// 	$('.mobile').css('border', '1px solid #dc3545');
+			// 	$('.e_mobile').html("Invalid mobile length").show();
+			// 	return false;
+			// } else {
+			// 	$('.e_mobile').hide();
+			// 	$('.mobile').css('border', '1px solid #ced4da');
+			// }
 
 			if (otp == "" || otp == null) {
 				$('.otp').css('border', '1px solid #dc3545');
