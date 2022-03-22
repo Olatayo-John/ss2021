@@ -196,7 +196,7 @@ class Usermodel extends CI_Model
 	public function sms_save_info()
 	{
 		$data = array(
-			'link_for' => htmlentities($this->input->post('link_for')),
+			'link_for' => "",
 			'mobile' => htmlentities($this->input->post('mobile')),
 			'body' => htmlentities($this->input->post('smsbdy')),
 			'user_id' => $this->session->userdata('rr_id'),
@@ -214,15 +214,15 @@ class Usermodel extends CI_Model
 		return true;
 	}
 
-	public function multiplsms_save_info($mobiledata, $smsbdy, $link_for)
+	public function multiplsms_save_info($mobile, $smsbdy)
 	{
 		$data = array(
-			'link_for' => htmlentities($link_for),
-			'mobile' => htmlentities(implode(",", $mobiledata)),
+			'link_for' => "",
+			'mobile' => htmlentities($mobile),
 			'body' => htmlentities($smsbdy),
 			'user_id' => $this->session->userdata('rr_id'),
 		);
-		$num = count($mobiledata);
+		$num = '1';
 		$this->db->insert('sent_links', $data);
 		$this->multiple_sms_update($num);
 		return true;

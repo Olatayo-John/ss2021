@@ -61,6 +61,13 @@ $route['logout'] = 'user/logout';
 $route['profile'] = 'user/edit';
 $route['rating'] = 'user/rating';
 $route['account'] = 'user/account';
+$route['get-link'] = 'user/get_link';
+
+$route['sms-import'] = 'user/sms_importcsv';
+$route['send-multiple-sms'] = 'user/multiple_sms_send_link';
+
+$route['email-import'] = 'user/importcsv';
+$route['send-multiple-email'] = 'user/send_multiple_link';
 
 $route['rate/(:any)'] = 'user/rate/$1';
 $route['generate-otp'] = 'user/gen_otp';

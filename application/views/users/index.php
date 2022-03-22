@@ -39,7 +39,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<div class="row">
 		<div class="col-md-5 p-0">
 			<!-- <label style="color: #294a63">Invite citizens for rating</label><br> -->
@@ -154,11 +154,12 @@
 	$(document).ready(function() {
 
 		//load bodyFile on pageLoad
+		// get-link
 		var id = $('.userid').val();
 		var csrfName = $('.csrf_hash').attr('name');
 		var csrfHash = $('.csrf_hash').val();
 		$.ajax({
-			url: "<?php echo base_url('user/get_link'); ?>",
+			url: "<?php echo base_url('get-link'); ?>",
 			method: "post",
 			data: {
 				id: id,
@@ -179,7 +180,7 @@
 				$('.genlinkbtn').removeClass('btn-danger').addClass('btn-success');
 			},
 			error: function(data) {
-				var baurl = "<?php echo base_url('user/account') ?>";
+				var baurl = "<?php echo base_url('account') ?>";
 				window.location.assign(baurl);
 			}
 		});
@@ -220,7 +221,7 @@
 			}
 		});
 
-
+		//send-single-email
 		$('.sendlinkbtn').click(function() {
 			var email = $('.email').val();
 			var sbj = $('.subj').val();
@@ -249,6 +250,7 @@
 			});
 		});
 
+		//send-multiple-email
 		$('.sendmultiplelinkbtn').click(function(e) {
 			e.preventDefault();
 			var link_for = $('.link_for').val();
@@ -284,7 +286,7 @@
 			});
 
 			$.ajax({
-					url: "<?php echo base_url('user/send_multiple_link'); ?>",
+					url: "<?php echo base_url('send-multiple-email'); ?>",
 					method: "post",
 					data: {
 						emaildata: emaildata,
@@ -311,6 +313,7 @@
 				});
 		});
 
+		//email-import
 		$('#upload_csv').on('submit', function(e) {
 			e.preventDefault();
 			var file = $('#csv_file').val();
@@ -325,7 +328,7 @@
 			}
 
 			$.ajax({
-				url: "<?php echo base_url('user/importcsv'); ?>",
+				url: "<?php echo base_url('email-import'); ?>",
 				method: "post",
 				data: new FormData(this),
 				[csrfName]: csrfHash,
@@ -361,6 +364,7 @@
 			});
 		});
 
+		//send-single-sms
 		$('.smssendlinkbtn').click(function() {
 			var mobile = $('.mobile').val();
 			var smsbdy = $('.smsbdy').val();
@@ -394,6 +398,7 @@
 			});
 		});
 
+		//sms-import
 		$('#smsupload_csv').on('submit', function(e) {
 			e.preventDefault();
 			var sms_file = $('#sms_csv_file').val();
@@ -408,7 +413,7 @@
 			}
 
 			$.ajax({
-				url: "<?php echo base_url('user/sms_importcsv'); ?>",
+				url: "<?php echo base_url('sms-import'); ?>",
 				method: "post",
 				data: new FormData(this),
 				[csrfName]: csrfHash,
@@ -427,7 +432,7 @@
 					$('.smsmodal').hide();
 					$('#sms_csv_file').val("");
 					for (i = 0; i < data.length; i++) {
-						$('#sms_select').append('<option disabled class="sms_options">+91' + data[i].Phonenumber + '</option>');
+						$('#sms_select').append('<option disabled class="sms_options">' + data[i].Phonenumber + '</option>');
 					}
 					$('#mobile').hide();
 					$('.smssendlinkbtn').hide();
@@ -444,6 +449,7 @@
 			});
 		});
 
+		//send-multiple-sms
 		$('.smssendmultiplelinkbtn').click(function(e) {
 			e.preventDefault();
 			var link_for = $('.link_for').val();
@@ -478,30 +484,31 @@
 			});
 
 			$.ajax({
-					url: "<?php echo base_url('user/multiple_sms_send_link'); ?>",
-					method: "post",
-					data: {
-						mobiledata: mobiledata,
-						smsbdy: smsbdy,
-						link_for: link_for,
-						[csrfName]: csrfHash,
-					},
-					beforeSend: function() {
-						$('.smssendmultiplelinkbtn').attr('disabled', 'disabled');
-						$('.smssendmultiplelinkbtn').html('Sending...');
-						$('.smssendmultiplelinkbtn').css('cursor', 'not-allowed');
-						$('.smssendmultiplelinkbtn').removeClass('btn-success').addClass('btn-danger');
-					},
-					error: function() {
-						$('.smssendmultiplelinkbtn').attr('disabled', 'false');
-						$('.smssendmultiplelinkbtn').html('Send');
-						$('.smssendmultiplelinkbtn').css('cursor', 'pointer');
-						$('.smssendmultiplelinkbtn').removeClass('btn-danger').addClass('btn-success');
-					}
-				})
-				.done(function() {
+				url: "<?php echo base_url('send-multiple-sms'); ?>",
+				method: "post",
+				data: {
+					mobiledata: mobiledata,
+					smsbdy: smsbdy,
+					link_for: link_for,
+					[csrfName]: csrfHash,
+				},
+				beforeSend: function(res) {
+					// $('.smssendmultiplelinkbtn').attr('disabled', 'disabled');
+					// $('.smssendmultiplelinkbtn').html('Sending...');
+					// $('.smssendmultiplelinkbtn').css('cursor', 'not-allowed');
+					// $('.smssendmultiplelinkbtn').removeClass('btn-success').addClass('btn-danger');
+				},
+				success:function(res){
 					window.location.reload();
-				});
+					// console.log(res);
+				},
+				error: function(res) {
+					$('.smssendmultiplelinkbtn').attr('disabled', 'false');
+					$('.smssendmultiplelinkbtn').html('Send');
+					$('.smssendmultiplelinkbtn').css('cursor', 'pointer');
+					$('.smssendmultiplelinkbtn').removeClass('btn-danger').addClass('btn-success');
+				}
+			});
 		});
 
 	});

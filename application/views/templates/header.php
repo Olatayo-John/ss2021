@@ -101,13 +101,7 @@
 
 	</nav>
 	<div class="container">
-		<?php if ($this->session->flashdata('small_bal_length')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('small_bal_length') ?></strong>
-			</div>
-		<?php endif; ?>
+		<!-- denied -->
 		<?php if ($this->session->flashdata('acces_denied')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
@@ -115,27 +109,7 @@
 				<strong><?php echo $this->session->flashdata('acces_denied') ?></strong>
 			</div>
 		<?php endif; ?>
-		<?php if ($this->session->flashdata('quota_expired')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('quota_expired') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('sub_failed')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('sub_failed') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('reg_succ')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('reg_succ') ?></strong>
-			</div>
-		<?php endif; ?>
+
 		<?php if (form_error('subj') || form_error('body') || form_error('email') || form_error('uname') || form_error('pwd')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
@@ -143,6 +117,7 @@
 				<strong>Please fill in all fields</strong>
 			</div>
 		<?php endif; ?>
+
 		<?php if (form_error('sentcode')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
@@ -150,146 +125,26 @@
 				<strong>Verification code is required to activate your account</strong>
 			</div>
 		<?php endif; ?>
-		<?php if ($this->session->flashdata('link_send_err')) : ?>
+
+		<!-- err -->
+		<?php if ($this->session->flashdata('err')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
 				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('link_send_err') ?></strong>
+				<strong><?php echo $this->session->flashdata('err') ?></strong>
 			</div>
 		<?php endif; ?>
-		<?php if ($this->session->flashdata('payment_save_err')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('payment_save_err') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('link_send_succ')) : ?>
+
+		<!-- succ -->
+		<?php if ($this->session->flashdata('succ')) : ?>
 			<div class="alert alert-success">
 				<button class="close" data-dismiss="alert">&times;</button>
 				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('link_send_succ') ?></strong>
+				<strong><?php echo $this->session->flashdata('succ') ?></strong>
 			</div>
 		<?php endif; ?>
-		<?php if ($this->session->flashdata('sms_link_send_err')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('sms_link_send_err') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('sms_link_send_succ')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('sms_link_send_succ') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('login_now')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('login_now') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('loginfirst')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('loginfirst') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('logout_first')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('logout_first') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('login_first')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('login_first') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('invalid_login')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('invalid_login') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('valid_login')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('valid_login') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('reg_failed')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('reg_failed') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('adduser_emailndmobile_code')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('adduser_emailndmobile_code') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('adduser_email_code')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('adduser_email_code') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('adduser_mobile_code')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('adduser_mobile_code') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('email_code')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('email_code') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('update_failed')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('update_failed') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('update_succ')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('update_succ') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('user_updated')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('user_updated') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('user_deleted')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('user_deleted') ?></strong>
-			</div>
-		<?php endif; ?>
+
+		<!-- logOut -->
 		<?php if ($this->session->flashdata('log_out')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
@@ -297,32 +152,5 @@
 				<strong><?php echo $this->session->flashdata('log_out') ?></strong>
 			</div>
 		<?php endif; ?>
-		<?php if ($this->session->flashdata('cntc_us_succ')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('cntc_us_succ') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('cntc_us_err')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('cntc_us_err') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('rating_succ')) : ?>
-			<div class="alert alert-success">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-success"></i>
-				<strong><?php echo $this->session->flashdata('rating_succ') ?></strong>
-			</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('rating_err')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-danger"></i>
-				<strong><?php echo $this->session->flashdata('rating_err') ?></strong>
-			</div>
-		<?php endif; ?>
+
 	</div>

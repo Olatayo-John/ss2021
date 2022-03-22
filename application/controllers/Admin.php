@@ -11,7 +11,7 @@ class Admin extends CI_Controller
 	public function index()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 			exit;
 		}
@@ -27,7 +27,7 @@ class Admin extends CI_Controller
 	public function users($offset = 0)
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -64,7 +64,7 @@ class Admin extends CI_Controller
 	public function votes($offset = 0)
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -101,7 +101,7 @@ class Admin extends CI_Controller
 	public function add_user()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -126,7 +126,7 @@ class Admin extends CI_Controller
 			$pwd = password_hash($randpwd, PASSWORD_DEFAULT);
 			$res = $this->Usermodel->register($form_key, $pwd);
 			if ($res !== TRUE) {
-				$this->session->set_flashdata('reg_failed', 'Registration Failed');
+				$this->session->set_flashdata('err', 'Registration Failed');
 				redirect('register');
 			} else {
 				if (isset($_POST['mail_chkbox']) && isset($_POST['mobile_chkbox'])) {
@@ -135,7 +135,7 @@ class Admin extends CI_Controller
 					$link = base_url() . "rate/" . $form_key;
 					$mobile = $this->input->post('mobile');
 					$login_link = base_url();
-					$res = $this->send_email_code($fname, $randpwd, $email, $link, $login_link);
+					$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
 
 					$body = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
 					$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
@@ -145,10 +145,10 @@ class Admin extends CI_Controller
 					$result = curl_exec($req);
 
 					if (strpos(json_encode($result, true), '100') !== true) {
-						$this->session->set_flashdata('sms_link_send_err', 'Error sending SMS');
+						$this->session->set_flashdata('err', 'Error sending SMS');
 						redirect($_SERVER['HTTP_REFERER']);
 					} else {
-						$this->session->set_flashdata('adduser_emailndmobile_code', 'User added. Login credentials sent to user e-mail and mobile');
+						$this->session->set_flashdata('succ', 'User added. Login credentials sent to user e-mail and mobile');
 						redirect($_SERVER['HTTP_REFERER']);
 					}
 					curl_close($req);
@@ -158,8 +158,8 @@ class Admin extends CI_Controller
 					$link = base_url() . "rate/" . $form_key;
 					$mobile = $this->input->post('mobile');
 					$login_link = base_url();
-					$res = $this->send_email_code($fname, $randpwd, $email, $link, $login_link);
-					$this->session->set_flashdata('adduser_email_code', 'User added. Login credentials sent to user e-mail');
+					$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
+					$this->session->set_flashdata('succ', 'User added. Login credentials sent to user e-mail');
 					redirect($_SERVER['HTTP_REFERER']);
 				} elseif (isset($_POST['mobile_chkbox'])) {
 					$fname = $this->input->post('full_name');
@@ -176,10 +176,10 @@ class Admin extends CI_Controller
 					$result = curl_exec($req);
 
 					if (strpos(json_encode($result, true), '100') !== true) {
-						$this->session->set_flashdata('sms_link_send_err', 'Error sending SMS');
+						$this->session->set_flashdata('err', 'Error sending SMS');
 						redirect($_SERVER['HTTP_REFERER']);
 					} else {
-						$this->session->set_flashdata('adduser_mobile_code', 'User added. Login credentials sent to user mobile');
+						$this->session->set_flashdata('succ', 'User added. Login credentials sent to user mobile');
 						redirect($_SERVER['HTTP_REFERER']);
 					}
 					curl_close($req);
@@ -188,7 +188,7 @@ class Admin extends CI_Controller
 		}
 	}
 
-	public function send_email_code($fname, $randpwd, $email, $link, $login_link)
+	public function send_succ($fname, $randpwd, $email, $link, $login_link)
 	{
 		$config['protocol']    = 'smtp';
 		$config['smtp_host']    = 'mail.swachhsurvekshan.org';
@@ -211,7 +211,7 @@ class Admin extends CI_Controller
 		);
 		$body = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
 
-		$this->email->from('swachh22@swachhsurvekshan.org','Swachh Survekshan');
+		$this->email->from('swachh22@swachhsurvekshan.org', 'Swachh Survekshan');
 		$this->email->to($email);
 		$this->email->subject("Login Credentials");
 		$this->email->message($body);
@@ -222,7 +222,7 @@ class Admin extends CI_Controller
 	public function get_user()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect($_SERVER['HTTP_REFERER']);
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -249,7 +249,7 @@ class Admin extends CI_Controller
 	public function votes_get_user()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -265,7 +265,7 @@ class Admin extends CI_Controller
 	public function update_user()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -273,14 +273,14 @@ class Admin extends CI_Controller
 			redirect('login');
 		} else {
 			$data = $this->Adminmodel->update_user($_POST['user_id']);
-			$this->session->set_flashdata('user_updated', 'User details updated');
+			$this->session->set_flashdata('succ', 'User details updated');
 		}
 	}
 
 	public function delete_user()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -288,14 +288,14 @@ class Admin extends CI_Controller
 			redirect('login');
 		} else {
 			$res = $this->Adminmodel->delete_user($_POST['user_id'], $_POST['form_key']);
-			$this->session->set_flashdata('user_deleted', 'User deleted');
+			$this->session->set_flashdata('succ', 'User deleted');
 		}
 	}
 
 	public function pick_plan()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -380,62 +380,41 @@ class Admin extends CI_Controller
 					$res = $this->Adminmodel->save_payment($userData);
 					// $res = true;
 					if ($res == true) {
-						$this->session->set_flashdata('reg_succ', 'Payment Done.');
+						$this->session->set_flashdata('succ', 'Payment Done.');
 						//$this->payment_status($userData);
 						$this->load->view('templates/header');
 						$this->load->view('admin/pay_status', ['userData' => $userData]);
 						$this->load->view('templates/footer');
 					} else {
-						$this->session->set_flashdata('payment_save_err', 'Error saving contacts to DATABASE.');
+						$this->session->set_flashdata('err', 'Error saving contacts to DATABASE.');
 						$this->load->view('templates/header');
 						$this->load->view('admin/pay_status', ['userData' => $userData]);
 						$this->load->view('templates/footer');
 					}
 				} else {
-					$this->session->set_flashdata('sub_failed', 'Payment Failed.');
+					$this->session->set_flashdata('err', 'Payment Failed.');
 					$this->load->view('templates/header');
 					$this->load->view('admin/pay_status', ['userData' => $userData]);
 					$this->load->view('templates/footer');
 				}
 			} else {
-				$this->session->set_flashdata('sub_failed', 'Payment Failed.');
+				$this->session->set_flashdata('err', 'Payment Failed.');
 				$this->load->view('templates/header');
 				$this->load->view('admin/pay_status', ['userData' => $userData]);
 				$this->load->view('templates/footer');
 			}
 		} else {
-			$this->session->set_flashdata('sub_failed', 'Payment Failed.');
+			$this->session->set_flashdata('err', 'Payment Failed.');
 			$this->load->view('templates/header');
 			$this->load->view('admin/pay_status', ['userData' => $userData]);
 			$this->load->view('templates/footer');
 		}
 	}
 
-	public function emailsms_export_csv()
-	{
-		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
-			redirect('login');
-		}
-		if ($this->session->userdata('rr_admin') == "0") {
-			$this->session->set_flashdata('acces_denied', 'Access Denied.');
-			redirect('login');
-		}
-		header("Content-Type: text/csv; charset=utf-8");
-		header("Content-Disposition: attachment; filename=sent_links.csv");
-		$output = fopen("php://output", "w");
-		fputcsv($output, array('ID', 'Mobile', 'E-mail', 'Subject', 'Body', 'Link For', 'Sent at'));
-		$data = $this->Adminmodel->emailsms_export_csv();
-		foreach ($data as $row) {
-			fputcsv($output, $row);
-		}
-		fclose($output);
-	}
-
 	public function feedbacks()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('login');
 		}
 		if ($this->session->userdata('rr_admin') == "0") {
@@ -445,8 +424,7 @@ class Admin extends CI_Controller
 		$data['r_reviews'] = $this->Adminmodel->r_feedback_reviews();
 		$data['q_reviews'] = $this->Adminmodel->q_feedback_reviews();
 		$this->load->view('templates/header');
-		$this->load->view('admin/feedbacks',$data);
+		$this->load->view('admin/feedbacks', $data);
 		$this->load->view('templates/footer');
 	}
-
 }

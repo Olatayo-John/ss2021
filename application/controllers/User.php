@@ -26,7 +26,7 @@ class User extends CI_Controller
 		} else {
 			$validate = $this->Usermodel->login();
 			if ($validate == FALSE) {
-				$this->session->set_flashdata('invalid_login', 'Username/Password is wrong');
+				$this->session->set_flashdata('err', 'Username/Password is wrong');
 				redirect('user');
 				exit();
 			}
@@ -51,7 +51,7 @@ class User extends CI_Controller
 					'rr_logged_in' => TRUE,
 				);
 				$this->session->set_userdata($rr_user_sess);
-				$this->session->set_flashdata('valid_login', 'Welcome ' . $this->session->userdata('rr_fname') . "!");
+				$this->session->set_flashdata('succ', 'Welcome ' . $this->session->userdata('rr_fname') . "!");
 				redirect('rating');
 			}
 		}
@@ -77,7 +77,7 @@ class User extends CI_Controller
 	public function register()
 	{
 		if ($this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('logout_first', 'Log out first.');
+			$this->session->set_flashdata('err', 'Log out first.');
 			redirect($_SERVER['HTTP_REFERER']);
 		}
 		$this->form_validation->set_rules('full_name', 'Full Name', 'required|trim|html_escape');
@@ -108,10 +108,10 @@ class User extends CI_Controller
 			curl_setopt($req, CURLOPT_URL, $complete_url);
 			// $result = curl_exec($req);
 
-			$res = $this->send_email_code($fname, $randpwd, $email, $link, $login_link);
+			$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
 
 			if ($res !== true) {
-				$this->session->set_flashdata('reg_failed', 'Failed to send Login credentials' . $res);
+				$this->session->set_flashdata('err', 'Failed to send Login credentials' . $res);
 				redirect('register');
 				exit();
 			} else {
@@ -119,11 +119,11 @@ class User extends CI_Controller
 
 				$res = $this->Usermodel->register($form_key, $pwd);
 				if ($res !== TRUE) {
-					$this->session->set_flashdata('reg_failed', 'Registration Failed');
+					$this->session->set_flashdata('err', 'Registration Failed');
 					redirect('register');
 					exit();
 				} else {
-					$this->session->set_flashdata('email_code', 'Login credentials sent to your mail.');
+					$this->session->set_flashdata('succ', 'Login credentials sent to your mail.');
 					redirect('login');
 					exit();
 				}
@@ -134,7 +134,7 @@ class User extends CI_Controller
 	public function edit()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('login_first', 'Login first.');
+			$this->session->set_flashdata('err', 'Login first.');
 			redirect('login');
 		}
 
@@ -151,16 +151,16 @@ class User extends CI_Controller
 		} else {
 			$res = $this->Usermodel->edit();
 			if ($res !== TRUE) {
-				$this->session->set_flashdata('update_failed', 'Update Failed');
+				$this->session->set_flashdata('err', 'Update Failed');
 			} else {
-				$this->session->set_flashdata('update_succ', 'Profile Updated');
+				$this->session->set_flashdata('succ', 'Profile Updated');
 			}
 
 			redirect('edit');
 		}
 	}
 
-	public function send_email_code($fname, $randpwd, $email, $link, $login_link)
+	public function send_succ($fname, $randpwd, $email, $link, $login_link)
 	{
 		$config['protocol']    = 'smtp';
 		$config['smtp_host']    = 'mail.swachhsurvekshan.org';
@@ -193,7 +193,7 @@ class User extends CI_Controller
 	public function rating()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('login_first', 'Login first.');
+			$this->session->set_flashdata('err', 'Login first.');
 			redirect('login');
 		} else {
 			$this->load->view('templates/header');
@@ -205,17 +205,17 @@ class User extends CI_Controller
 	public function get_link()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
 		$cq_res = $this->Adminmodel->check_quota_expire();
 		if ($cq_res !== false) {
 			$db_email = $cq_res->email;
 			if ($this->session->userdata('rr_admin') == "0") {
-				$this->session->set_flashdata('quota_expired', 'Quota has expired. Request has been sent to admin for renewal');
+				$this->session->set_flashdata('err', 'Quota has expired. Request has been sent to admin for renewal');
 				$this->quota_send_mail_expire($db_email);
 			} else if ($this->session->userdata('rr_admin') == "1") {
-				$this->session->set_flashdata('quota_expired', 'Quota has expired');
+				$this->session->set_flashdata('err', 'Quota has expired');
 			}
 		} else {
 			$res = $this->Usermodel->get_link($_POST['id']);
@@ -237,15 +237,15 @@ class User extends CI_Controller
 
 				//votingFile
 				$myfile = fopen("body.txt", "w") or die("Unable to open file!");
-				$txt = "Please vote for your city to become No.1\n";
+				$txt = "Make Bulandshahar No.1\r\n";
 				fwrite($myfile, $txt);
-				$txt = "Link to vote\n";
+				$txt = "Vote your feedback\r\n";
 				fwrite($myfile, $txt);
 				$txt = base_url() . "rate/" . $output['form_key'] . "\n\n";
 				fwrite($myfile, $txt);
-				$txt = "Best Regards\n";
+				$txt = "Best Regards\r\n";
 				fwrite($myfile, $txt);
-				$txt = "Nagar Nigam Ghaziabad";
+				$txt = "NIPL";
 				fwrite($myfile, $txt);
 				fclose($myfile);
 
@@ -255,15 +255,17 @@ class User extends CI_Controller
 				fwrite($myfile, $txt);
 				$txt = base_url() . "download-swachhta-app\n\n";
 				fwrite($myfile, $txt);
-				$txt = "Best Regards";
+				$txt = "Best Regards\n";
+				fwrite($myfile, $txt);
+				$txt = "NIPL";
 				fwrite($myfile, $txt);
 				fclose($myfile);
 
 				//BothFile
 				$myfile = fopen("Bothbody.txt", "w") or die("Unable to open file!");
-				$txt = "Please vote for your city to become No.1\n";
+				$txt = "Make Bulandshahar No.1\r\n";
 				fwrite($myfile, $txt);
-				$txt = "Link to vote\n";
+				$txt = "Vote your feedback\r\n";
 				fwrite($myfile, $txt);
 				$txt = base_url() . "rate/" . $output['form_key'] . "\n\n";
 				fwrite($myfile, $txt);
@@ -273,7 +275,7 @@ class User extends CI_Controller
 				fwrite($myfile, $txt);
 				$txt = "Best Regards\n";
 				fwrite($myfile, $txt);
-				$txt = "Nagar Nigam Ghaziabad";
+				$txt = "NIPL";
 				fwrite($myfile, $txt);
 				fclose($myfile);
 
@@ -316,15 +318,15 @@ class User extends CI_Controller
 		} else if ($_POST['val'] && $_POST['val'] === 'ow') {
 			//votingFile
 			$myfile = fopen("body.txt", "w") or die("Unable to open file!");
-			$txt = "Please vote for your city to become No.1\n";
+			$txt = "Make Bulandshahar No.1\r\n";
 			fwrite($myfile, $txt);
-			$txt = "Link to vote\n";
+			$txt = "Vote your feedback\r\n";
 			fwrite($myfile, $txt);
 			$txt = base_url() . "rate/" . $_SESSION['rr_form_key'] . "\n\n";
 			fwrite($myfile, $txt);
-			$txt = "Best Regards\n";
+			$txt = "Best Regards\r\n";
 			fwrite($myfile, $txt);
-			$txt = "Nagar Nigam Ghaziabad";
+			$txt = "NIPL";
 			fwrite($myfile, $txt);
 			fclose($myfile);
 
@@ -334,15 +336,16 @@ class User extends CI_Controller
 			fwrite($myfile, $txt);
 			$txt = base_url() . "download-swachhta-app\n\n";
 			fwrite($myfile, $txt);
-			$txt = "Best Regards";
+			$txt = "Best Regards\n";
+			fwrite($myfile, $txt);
+			$txt = "NIPL";
 			fwrite($myfile, $txt);
 			fclose($myfile);
 
 			//BothFile
-			$myfile = fopen("Bothbody.txt", "w") or die("Unable to open file!");
-			$txt = "Please vote for your city to become No.1\n";
+			$txt = "Make Bulandshahar No.1\r\n";
 			fwrite($myfile, $txt);
-			$txt = "Link to vote\n";
+			$txt = "Vote your feedback\r\n";
 			fwrite($myfile, $txt);
 			$txt = base_url() . "rate/" . $_SESSION['rr_form_key'] . "\n\n";
 			fwrite($myfile, $txt);
@@ -352,7 +355,7 @@ class User extends CI_Controller
 			fwrite($myfile, $txt);
 			$txt = "Best Regards\n";
 			fwrite($myfile, $txt);
-			$txt = "Nagar Nigam Ghaziabad";
+			$txt = "NIPL";
 			fwrite($myfile, $txt);
 			fclose($myfile);
 		}
@@ -401,7 +404,7 @@ class User extends CI_Controller
 	public function send_link()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
 		$this->form_validation->set_rules('email', 'E-mail', 'required|trim|valid_email|html_escape');
@@ -416,10 +419,10 @@ class User extends CI_Controller
 				$db_email = $cq_res->email;
 				if ($this->session->userdata('rr_admin') == "0") {
 					$this->quota_send_mail_expire($db_email);
-					$this->session->set_flashdata('quota_expired', 'Quota has expired. Request has been sent to admin for renewal');
+					$this->session->set_flashdata('err', 'Quota has expired. Request has been sent to admin for renewal');
 					redirect('rating');
 				} else if ($this->session->userdata('rr_admin') == "1") {
-					$this->session->set_flashdata('quota_expired', 'Quota has expired');
+					$this->session->set_flashdata('err', 'Quota has expired');
 					redirect('pick-plan');
 				}
 			} else {
@@ -428,13 +431,13 @@ class User extends CI_Controller
 				$bdy = $this->input->post('bdy');
 				$mail_res = $this->link_send_mail($email, $subj, $bdy);
 				if ($mail_res !== true) {
-					$this->session->set_flashdata('link_send_err', $mail_res);
+					$this->session->set_flashdata('err', $mail_res);
 					redirect('rating');
 					exit();
 				} else {
 					$res = $this->Usermodel->save_info();
 					if ($res !== true) {
-						$this->session->set_flashdata('link_send_err', 'Error saving contacts to DATABASE.');
+						$this->session->set_flashdata('err', 'Error saving contacts to DATABASE.');
 						redirect('rating');
 						exit();
 					} else {
@@ -443,10 +446,10 @@ class User extends CI_Controller
 						if ($cq_res !== false) {
 							$db_email = $cq_res->email;
 							$this->quota_send_mail_expire($db_email);
-							$this->session->set_flashdata('link_send_succ', 'Link sent successfully');
+							$this->session->set_flashdata('succ', 'Link sent successfully');
 							redirect('rating');
 						} else {
-							$this->session->set_flashdata('link_send_succ', 'Link sent successfully');
+							$this->session->set_flashdata('succ', 'Link sent successfully');
 							redirect('rating');
 						}
 					}
@@ -528,7 +531,7 @@ class User extends CI_Controller
 	public function send_multiple_link()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
 		$cq_res = $this->Adminmodel->check_quota_expire();
@@ -536,9 +539,9 @@ class User extends CI_Controller
 			$db_email = $cq_res->email;
 			if ($this->session->userdata('rr_admin') == "0") {
 				$this->quota_send_mail_expire($db_email);
-				$this->session->set_flashdata('quota_expired', 'Quota has expired. Request has been sent to admin for renewal');
+				$this->session->set_flashdata('err', 'Quota has expired. Request has been sent to admin for renewal');
 			} else if ($this->session->userdata('rr_admin') == "1") {
-				$this->session->set_flashdata('quota_expired', 'Quota has expired');
+				$this->session->set_flashdata('err', 'Quota has expired');
 			}
 		} else {
 			$emaildata = $_POST['emaildata'];
@@ -547,24 +550,24 @@ class User extends CI_Controller
 			$num = count($emaildata);
 			$qbl_res = $this->Adminmodel->quota_bal_length();
 			if ($qbl_res->bal < $num) {
-				$this->session->set_flashdata('small_bal_length', 'Number of emails to be sent exceeds your remaining quota point of ' . $qbl_res->bal . ' .');
+				$this->session->set_flashdata('err', 'Number of emails to be sent exceeds your remaining quota point of ' . $qbl_res->bal . ' .');
 			} else {
 				$mail_res = $this->send_multiple_link_email($emaildata, $subj, $bdy);
 				if ($mail_res !== true) {
-					$this->session->set_flashdata('link_send_err', $mail_res);
+					$this->session->set_flashdata('err', $mail_res);
 				} else {
 					$res = $this->Usermodel->multiplemail_save_info($_POST['emaildata'], $_POST['subj'], $_POST['bdy'], $_POST['link_for']);
 					if ($res !== true) {
-						$this->session->set_flashdata('link_send_err', 'Error saving contacts to DATABASE.');
+						$this->session->set_flashdata('err', 'Error saving contacts to DATABASE.');
 					} else {
 						$length = count($emaildata);
 						$cq_res = $this->Adminmodel->quota_update($length);
 						if ($cq_res !== false) {
 							$db_email = $cq_res->email;
 							$this->quota_send_mail_expire($db_email);
-							$this->session->set_flashdata('link_send_succ', 'Link sent successfully');
+							$this->session->set_flashdata('succ', 'Link sent successfully');
 						} else {
-							$this->session->set_flashdata('link_send_succ', 'Link sent successfully');
+							$this->session->set_flashdata('succ', 'Link sent successfully');
 						}
 					}
 				}
@@ -602,7 +605,7 @@ class User extends CI_Controller
 	public function sms_send_link()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|html_escape');
@@ -616,45 +619,45 @@ class User extends CI_Controller
 				$db_email = $cq_res->email;
 				if ($this->session->userdata('rr_admin') == "0") {
 					$this->quota_send_mail_expire($db_email);
-					$this->session->set_flashdata('quota_expired', 'Quota has expired. Request has been sent to admin for renewal');
+					$this->session->set_flashdata('err', 'Quota has expired. Request has been sent to admin for renewal');
 					redirect('account');
 				} else if ($this->session->userdata('rr_admin') == "1") {
-					$this->session->set_flashdata('quota_expired', 'Quota has expired');
-					redirect('pick-plan');
+					$this->session->set_flashdata('err', 'Quota has expired');
+					redirect('account');
 				}
 			} else {
 				$mobile = $this->input->post('mobile');
 				$bdy = $this->input->post('smsbdy');
 
-				$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
+				$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 				$req = curl_init();
-				$complete_url = $url . curl_escape($req, $bdy) . "&rpt=1";
+				$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007197403786468321&rpt=1";
 				curl_setopt($req, CURLOPT_URL, $complete_url);
+				curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 				$result = curl_exec($req);
 
-				if (strpos(json_encode($result, true), '100') !== true) {
-					$this->session->set_flashdata('sms_link_send_err', 'Error sending SMS');
+				$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
+				$Jresult = json_decode($result, true);
+				// $httpCode = 44;
+
+				if ($httpCode !== 200) {
+					$this->session->set_flashdata('err', 'Error sending SMS. Error code ' . $httpCode);
 					redirect('rating');
 				} else {
-					$res = $this->Usermodel->sms_save_info();
-					if ($res !== true) {
-						$this->session->set_flashdata('link_send_err', 'Error saving contacts to DATABASE.');
+					if ($Jresult['STATUS'] == "ERROR") {
+						$this->session->set_flashdata('err', 'Error. ' . $Jresult['RESPONSE']['INFO']);
 						redirect('rating');
-					} else {
-						$length = '1';
-						$cq_res = $this->Adminmodel->quota_update($length);
-						if ($cq_res !== false) {
-							$db_email = $cq_res->email;
-							$db_mobile = $cq_res->mobile;
-							$this->quota_send_mail_expire($db_email);
-							$this->session->set_flashdata('sms_link_send_succ', 'SMS sent successfully');
-							redirect('rating');
-						} else {
-							$this->session->set_flashdata('sms_link_send_succ', 'SMS sent successfully');
+					} else if ($Jresult['STATUS'] == "OK") {
+						$res = $this->Usermodel->sms_save_info();
+						if ($res === true) {
+							$length = '1';
+							$cq_res = $this->Adminmodel->quota_update($length);
+							$this->session->set_flashdata('succ', $Jresult['RESPONSE']['INFO']);
 							redirect('rating');
 						}
 					}
 				}
+
 				curl_close($req);
 			}
 		}
@@ -675,52 +678,76 @@ class User extends CI_Controller
 	public function multiple_sms_send_link()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
+
 		$cq_res = $this->Adminmodel->check_quota_expire();
 		if ($cq_res !== false) {
 			$db_email = $cq_res->email;
 			if ($this->session->userdata('rr_admin') == "0") {
 				$this->quota_send_mail_expire($db_email);
-				$this->session->set_flashdata('quota_expired', 'Quota has expired. Request has been sent to admin for renewal');
+				$this->session->set_flashdata('err', 'Quota has expired. Request has been sent to admin for renewal');
 			} else if ($this->session->userdata('rr_admin') == "1") {
-				$this->session->set_flashdata('quota_expired', 'Quota has expired');
+				$this->session->set_flashdata('err', 'Quota has expired');
 			}
 		} else {
 			$mobiledata = $_POST['mobiledata'];
 			$smsbdy = $_POST['smsbdy'];
+			// $templateid = $_POST['templateid'];
+			$templateid = "1007197403786468321";
 			$num = count($mobiledata);
+
 			$qbl_res = $this->Adminmodel->quota_bal_length();
 			if ($qbl_res->bal < $num) {
-				$this->session->set_flashdata('small_bal_length', 'Number of sms to be sent exceeds your remaining quota point of ' . $qbl_res->bal . ' .');
+				$this->session->set_flashdata('err', 'Number of sms to be sent exceeds your remaining quota point of ' . $qbl_res->bal . ' .');
 			} else {
-				$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=" . implode(",", $mobiledata) . "&text=";
-				$req = curl_init();
-				$complete_url = $url . curl_escape($req, $smsbdy) . "&rpt=1";
-				curl_setopt($req, CURLOPT_URL, $complete_url);
-				$result = curl_exec($req);
+				$notsentArr = array();
+				$notsentstring = "<br>";
+				$notsentFlag = null;
 
-				if (strpos(json_encode($result, true), '100') !== true) {
-					$this->session->set_flashdata('sms_link_send_err', 'Error sending SMS');
-				} else {
-					$res = $this->Usermodel->multiplsms_save_info($_POST['mobiledata'], $_POST['smsbdy'], $_POST['link_for']);
-					if ($res !== true) {
-						$this->session->set_flashdata('link_send_err', 'Error saving contacts to DATABASE.');
+				foreach ($mobiledata as $mobile) {
+					//API send to multiple No.
+					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
+					$req = curl_init();
+					$complete_url = $url . curl_escape($req, $smsbdy) . "&entityid=1001715674475461342&templateid=" . $templateid . "&rpt=1";
+					curl_setopt($req, CURLOPT_URL, $complete_url);
+					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
+					$result = curl_exec($req);
+
+					$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
+					$Jresult = json_decode($result, true);
+					// $httpCode = 44;
+
+					if ($httpCode !== 200) {
+						array_push($notsentArr, array("error" => $httpCode . " SERVER ERROR", "mobile" => $mobile));
+						$notsentstring.= "Error- ".$httpCode . " SERVER ERROR, mobile- ".$mobile;
+						$notsentFlag = true;
 					} else {
-						$length = count($mobiledata);
-						$cq_res = $this->Adminmodel->quota_update($length);
-						if ($cq_res !== false) {
-							$db_email = $cq_res->email;
-							$db_mobile = $cq_res->mobile;
-							$this->quota_send_mail_expire($db_email);
-							$this->session->set_flashdata('sms_link_send_succ', 'SMS sent successfully');
-						} else {
-							$this->session->set_flashdata('sms_link_send_succ', 'SMS sent successfully');
+						if ($Jresult['STATUS'] == "ERROR") {
+							array_push($notsentArr, array("error" => $Jresult['RESPONSE']['CODE'] . " - " . $Jresult['RESPONSE']['INFO'], "mobile" => $mobile));
+							$notsentstring.= "Error- ".$Jresult['RESPONSE']['CODE'] . " - " . $Jresult['RESPONSE']['INFO'].", Mobile- ".$mobile."<br>";
+							$notsentFlag = true;
+						} else if ($Jresult['STATUS'] == "OK") {
+							$res = $this->Usermodel->multiplsms_save_info($mobile, $smsbdy);
+							if ($res === true) {
+								$length = '1';
+								$cq_res = $this->Adminmodel->quota_update($length);
+							}
 						}
 					}
+
+					curl_close($req);
 				}
-				curl_close($req);
+
+				if (count($notsentArr) < 0 || $notsentFlag !== null) {
+					$this->session->set_flashdata('err', $notsentstring);
+				} else {
+					$this->session->set_flashdata('succ', 'SUBMITTED');
+				}
+				die;
+
+				redirect('rating');
 			}
 		}
 	}
@@ -728,7 +755,7 @@ class User extends CI_Controller
 	public function account()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('loginfirst', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
 		$data['user'] = $this->Usermodel->user_total_ratings();
@@ -746,7 +773,7 @@ class User extends CI_Controller
 	public function bar_data()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('login_first', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 			exit();
 		}
@@ -765,7 +792,7 @@ class User extends CI_Controller
 	public function user_bar_data()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
-			$this->session->set_flashdata('login_first', 'Please login first');
+			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 			exit();
 		}
@@ -888,10 +915,10 @@ class User extends CI_Controller
 			$bdy = $this->input->post('msg');
 			$mail_res = $this->support_mail($name, $user_mail, $bdy);
 			if ($mail_res !== true) {
-				$this->session->set_flashdata('cntc_us_err', 'Error sending your message');
+				$this->session->set_flashdata('err', 'Error sending your message');
 				redirect($_SERVER['HTTP_REFERER']);
 			} else {
-				$this->session->set_flashdata('cntc_us_succ', 'Your message has been sent. We will get back to you as soon as possible');
+				$this->session->set_flashdata('succ', 'Your message has been sent. We will get back to you as soon as possible');
 				redirect($_SERVER['HTTP_REFERER']);
 			}
 		}
@@ -947,8 +974,7 @@ class User extends CI_Controller
 				if ($httpCode == 500) {
 					$data['status'] = false;
 					$data['msg'] = "Internal Server Error";
-				}
-				else if ($httpCode !== 200) {
+				} else if ($httpCode !== 200) {
 					$data['status'] = false;
 					$data['msg'] = "Check for OTP or Resend";
 				} else {
@@ -1032,8 +1058,7 @@ class User extends CI_Controller
 			if ($httpCode == 500) {
 				$data['status'] = false;
 				$data['msg'] = "Internal Server Error";
-			}
-			else if ($httpCode !== 200) {
+			} else if ($httpCode !== 200) {
 				$data['status'] = false;
 				$data['msg'] = ($j_cres['message']) ? $j_cres['message'] : "";
 			} else {
