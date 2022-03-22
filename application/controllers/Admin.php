@@ -125,36 +125,45 @@ class Admin extends CI_Controller
 			// $form_key = md5($rand);
 			$pwd = password_hash($randpwd, PASSWORD_DEFAULT);
 			$res = $this->Usermodel->register($form_key, $pwd);
+			// $res = true;
 			if ($res !== TRUE) {
 				$this->session->set_flashdata('err', 'Registration Failed');
 				redirect('register');
 			} else {
 				if (isset($_POST['mail_chkbox']) && isset($_POST['mobile_chkbox'])) {
-					$fname = $this->input->post('full_name');
-					$email = $this->input->post('email');
+					$fname = htmlentities($this->input->post('full_name'));
+					$email = htmlentities($this->input->post('email'));
 					$link = base_url() . "rate/" . $form_key;
-					$mobile = $this->input->post('mobile');
+					$mobile = htmlentities($this->input->post('mobile'));
 					$login_link = base_url();
+
+					//send email
 					$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
 
-					$body = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
-					$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
+					//send sms
+					$bdy = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
+					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 					$req = curl_init();
-					$complete_url = $url . curl_escape($req, $body) . "&rpt=1";
+					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=xxxxxxxxxxx&rpt=1";
 					curl_setopt($req, CURLOPT_URL, $complete_url);
+					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 					$result = curl_exec($req);
 
-					if (strpos(json_encode($result, true), '100') !== true) {
-						$this->session->set_flashdata('err', 'Error sending SMS');
+					$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
+					$Jresult = json_decode($result, true);
+
+					if ($Jresult['STATUS'] == "ERROR") {
+						$this->session->set_flashdata('err', 'User added.<br>Error. ' . $Jresult['RESPONSE']['INFO']);
 						redirect($_SERVER['HTTP_REFERER']);
-					} else {
+					} else if ($Jresult['STATUS'] == "OK") {
 						$this->session->set_flashdata('succ', 'User added. Login credentials sent to user e-mail and mobile');
 						redirect($_SERVER['HTTP_REFERER']);
 					}
+
 					curl_close($req);
 				} elseif (isset($_POST['mail_chkbox'])) {
-					$fname = $this->input->post('full_name');
-					$email = $this->input->post('email');
+					$fname = htmlentities($this->input->post('full_name'));
+					$email = htmlentities($this->input->post('email'));
 					$link = base_url() . "rate/" . $form_key;
 					$mobile = $this->input->post('mobile');
 					$login_link = base_url();
@@ -162,26 +171,36 @@ class Admin extends CI_Controller
 					$this->session->set_flashdata('succ', 'User added. Login credentials sent to user e-mail');
 					redirect($_SERVER['HTTP_REFERER']);
 				} elseif (isset($_POST['mobile_chkbox'])) {
-					$fname = $this->input->post('full_name');
-					$email = $this->input->post('email');
+					$fname = htmlentities($this->input->post('full_name'));
+					$email = htmlentities($this->input->post('email'));
 					$link = base_url() . "rate/" . $form_key;
 					$mobile = $this->input->post('mobile');
 					$login_link = base_url();
-					$body = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
 
-					$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
+					$bdy = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
+					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 					$req = curl_init();
-					$complete_url = $url . curl_escape($req, $body) . "&rpt=1";
+					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=xxxxxxxxxxx&rpt=1";
 					curl_setopt($req, CURLOPT_URL, $complete_url);
+					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 					$result = curl_exec($req);
 
-					if (strpos(json_encode($result, true), '100') !== true) {
-						$this->session->set_flashdata('err', 'Error sending SMS');
+					$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
+					$Jresult = json_decode($result, true);
+
+					if ($httpCode !== 200) {
+						$this->session->set_flashdata('err', 'User added.<br>Error sending SMS. Error code ' . $httpCode);
 						redirect($_SERVER['HTTP_REFERER']);
 					} else {
-						$this->session->set_flashdata('succ', 'User added. Login credentials sent to user mobile');
-						redirect($_SERVER['HTTP_REFERER']);
+						if ($Jresult['STATUS'] == "ERROR") {
+							$this->session->set_flashdata('err', 'User added.<br>Error. ' . $Jresult['RESPONSE']['INFO']);
+							redirect($_SERVER['HTTP_REFERER']);
+						} else if ($Jresult['STATUS'] == "OK") {
+							$this->session->set_flashdata('succ', 'User added. Login credentials sent to user mobile');
+							redirect($_SERVER['HTTP_REFERER']);
+						}
 					}
+
 					curl_close($req);
 				}
 			}

@@ -493,10 +493,10 @@
 					[csrfName]: csrfHash,
 				},
 				beforeSend: function(res) {
-					// $('.smssendmultiplelinkbtn').attr('disabled', 'disabled');
-					// $('.smssendmultiplelinkbtn').html('Sending...');
-					// $('.smssendmultiplelinkbtn').css('cursor', 'not-allowed');
-					// $('.smssendmultiplelinkbtn').removeClass('btn-success').addClass('btn-danger');
+					$('.smssendmultiplelinkbtn').attr('disabled', 'disabled');
+					$('.smssendmultiplelinkbtn').html('Sending...');
+					$('.smssendmultiplelinkbtn').css('cursor', 'not-allowed');
+					$('.smssendmultiplelinkbtn').removeClass('btn-success').addClass('btn-danger');
 				},
 				success:function(res){
 					window.location.reload();

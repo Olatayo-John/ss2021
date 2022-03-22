@@ -100,14 +100,16 @@ class User extends CI_Controller
 			$link = base_url() . "rate/" . $form_key;
 			$login_link = base_url();
 
-			$body = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
-			$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
-
+			//send sms
+			$bdy = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
+			$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 			$req = curl_init();
-			$complete_url = $url . curl_escape($req, $body) . "&rpt=1";
+			$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=xxxxxxxxxxx&rpt=1";
 			curl_setopt($req, CURLOPT_URL, $complete_url);
-			// $result = curl_exec($req);
+			curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
+			$result = curl_exec($req);
 
+			//send email
 			$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
 
 			if ($res !== true) {
@@ -721,12 +723,12 @@ class User extends CI_Controller
 
 					if ($httpCode !== 200) {
 						array_push($notsentArr, array("error" => $httpCode . " SERVER ERROR", "mobile" => $mobile));
-						$notsentstring.= "Error- ".$httpCode . " SERVER ERROR, mobile- ".$mobile;
+						$notsentstring .= "Error- " . $httpCode . " SERVER ERROR, mobile- " . $mobile;
 						$notsentFlag = true;
 					} else {
 						if ($Jresult['STATUS'] == "ERROR") {
 							array_push($notsentArr, array("error" => $Jresult['RESPONSE']['CODE'] . " - " . $Jresult['RESPONSE']['INFO'], "mobile" => $mobile));
-							$notsentstring.= "Error- ".$Jresult['RESPONSE']['CODE'] . " - " . $Jresult['RESPONSE']['INFO'].", Mobile- ".$mobile."<br>";
+							$notsentstring .= "Error- " . $Jresult['RESPONSE']['CODE'] . " - " . $Jresult['RESPONSE']['INFO'] . ", Mobile- " . $mobile . "<br>";
 							$notsentFlag = true;
 						} else if ($Jresult['STATUS'] == "OK") {
 							$res = $this->Usermodel->multiplsms_save_info($mobile, $smsbdy);
