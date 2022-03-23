@@ -141,10 +141,10 @@ class Admin extends CI_Controller
 					$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
 
 					//send sms
-					$bdy = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
+					$bdy = "Hello " . $fname . "\n\nBelow are your login details :\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to collect Feedbacks.\r\nNIPL";
 					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 					$req = curl_init();
-					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=xxxxxxxxxxx&rpt=1";
+					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007838850146399750&rpt=1";
 					curl_setopt($req, CURLOPT_URL, $complete_url);
 					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 					$result = curl_exec($req);
@@ -177,10 +177,10 @@ class Admin extends CI_Controller
 					$mobile = $this->input->post('mobile');
 					$login_link = base_url();
 
-					$bdy = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
+					$bdy = "Hello " . $fname . "\n\nBelow are your login details :\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to collect Feedbacks.\r\nNIPL";
 					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 					$req = curl_init();
-					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=xxxxxxxxxxx&rpt=1";
+					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007838850146399750&rpt=1";
 					curl_setopt($req, CURLOPT_URL, $complete_url);
 					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 					$result = curl_exec($req);

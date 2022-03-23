@@ -89,7 +89,7 @@
 					<div class="form-group">
 						<label>Password</label>
 						<div class="input-group">
-						<input type="text" name="u_pwd" class="form-control u_pwd">
+							<input type="text" name="u_pwd" class="form-control u_pwd">
 							<div class="input-group-prepend genpwdbtn">
 								<div class="input-group-text"><i class="fas fa-sync-alt"></i></div>
 							</div>
@@ -233,6 +233,7 @@
 					return false;
 				}
 				if (u_mobile.length < 10 || u_mobile.length > 10) {
+					$('.u_mobile').css('border', '1px solid red');
 					$('.u_mobileerr').show();
 					return false;
 				} else {

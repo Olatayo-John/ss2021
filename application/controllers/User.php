@@ -101,10 +101,10 @@ class User extends CI_Controller
 			$login_link = base_url();
 
 			//send sms
-			$bdy = "Hello " . $fname . "\n\nBelow are your login credentails:\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to get reviews.\nYou can login here " . $login_link . "\n\nIf you have any questions, send us an email at info@nktech.in.\n\nBest Regards,\nNKTECH\nhttps://nktech.in";
+			$bdy = "Hello " . $fname . "\n\nBelow are your login details :\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to collect Feedbacks.\r\nNIPL";
 			$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 			$req = curl_init();
-			$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=xxxxxxxxxxx&rpt=1";
+			$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007838850146399750&rpt=1";
 			curl_setopt($req, CURLOPT_URL, $complete_url);
 			curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 			$result = curl_exec($req);
@@ -612,6 +612,7 @@ class User extends CI_Controller
 		}
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|html_escape');
 		$this->form_validation->set_rules('smsbdy', 'Body', 'required|trim|html_escape');
+		$this->form_validation->set_rules('templateID', 'TemplateID', 'required|trim|html_escape');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->rating();
@@ -630,10 +631,11 @@ class User extends CI_Controller
 			} else {
 				$mobile = $this->input->post('mobile');
 				$bdy = $this->input->post('smsbdy');
+				$templateID = $this->input->post('templateID');
 
 				$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
 				$req = curl_init();
-				$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007197403786468321&rpt=1";
+				$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=" . $templateID . "&rpt=1";
 				curl_setopt($req, CURLOPT_URL, $complete_url);
 				curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 				$result = curl_exec($req);
@@ -696,8 +698,7 @@ class User extends CI_Controller
 		} else {
 			$mobiledata = $_POST['mobiledata'];
 			$smsbdy = $_POST['smsbdy'];
-			// $templateid = $_POST['templateid'];
-			$templateid = "1007197403786468321";
+			$templateid = $_POST['templateID'];
 			$num = count($mobiledata);
 
 			$qbl_res = $this->Adminmodel->quota_bal_length();

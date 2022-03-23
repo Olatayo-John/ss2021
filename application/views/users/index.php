@@ -58,15 +58,15 @@
 				<!-- <label style="color: #294a63">Links</label><br> -->
 				<h4 style="color: #294a63">Links</h4>
 				<div class="form-check form-check-inline ml-3">
-					<input class="form-check-input" type="radio" name="linkTosend" value="vote" id="vlink" checked="true">
+					<input class="form-check-input" type="radio" name="linkTosend" value="vote" id="vlink" checked="true" templateID="1007176208355786033">
 					<label class="form-check-label" for="vlink">Voting Link</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="linkTosend" value="app" id="alink">
+					<input class="form-check-input" type="radio" name="linkTosend" value="app" id="alink" templateID="1007884458040467388">
 					<label class="form-check-label" for="alink">App Link</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="linkTosend" value="both" id="blink">
+					<input class="form-check-input" type="radio" name="linkTosend" value="both" id="blink" templateID="">
 					<label class="form-check-label" for="blink">Both</label>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 
 			<form action="<?php echo base_url('user/sms_send_link'); ?>" method="post" id="sms_gen_link_form" class="sms_gen_link_form">
 				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name() ?>" value="<?php echo $this->security->get_csrf_hash() ?>" class="csrf_hash">
-				<input type="hidden" name="userid" value="<?php echo $this->session->userdata('rr_id'); ?>" class="userid">
+				<input type="hidden" name="templateID" value="1007176208355786033" class="templateID">
 				<div class="sms_import text-right d-flex justify-content-between mb-2">
 					<button class="btn singlsmssend" type="button" style="display:none;background:#294a63;color:#fff">Send single sms</button>
 					<input type="hidden" name="link_for" class="link_for">
@@ -187,6 +187,7 @@
 
 		$(document).on('click', '.form-check-input', function() {
 			var val = $(this).val();
+			var templateID = $(this).attr("templateID");
 			var csrfName = $('.csrf_hash').attr('name');
 			var csrfHash = $('.csrf_hash').val();
 
@@ -205,6 +206,7 @@
 						$('.link_for').val('Swachh Survekshan');
 						if (val === "vote") {
 							$(".bdy,.smsbdy").load("<?php echo base_url('body.txt'); ?>");
+							// $(".templateID").val(this.attr("templateID"));
 						}
 						if (val === "app") {
 							$(".bdy,.smsbdy").load("<?php echo base_url('Appbody.txt'); ?>");
@@ -212,6 +214,8 @@
 						if (val === "both") {
 							$(".bdy,.smsbdy").load("<?php echo base_url('Bothbody.txt'); ?>");
 						}
+
+						$(".templateID").val(templateID);
 					},
 					error: function(data) {
 						var baurl = "<?php echo base_url('user/account') ?>";
@@ -368,6 +372,7 @@
 		$('.smssendlinkbtn').click(function() {
 			var mobile = $('.mobile').val();
 			var smsbdy = $('.smsbdy').val();
+			var templateID = $('.templateID').val();
 
 			if (mobile == "" || mobile == null) {
 				$('.mobile').css('border', '2px solid red');
@@ -386,6 +391,10 @@
 				return false;
 			} else {
 				$('.smsbdy').css('border', '0 solid red');
+			}
+			if (templateID == "" || templateID == null) {
+				alert("Missing Template ID");
+				return false;
 			}
 
 			$.ajax({
@@ -457,6 +466,7 @@
 			var smsbdy = $('.smsbdy').val();
 			var csrfName = $('.csrf_hash').attr('name');
 			var csrfHash = $('.csrf_hash').val();
+			var templateID = $('.templateID').val();
 
 			if (mobile == "" || mobile == null) {
 				$('.mobile').css('border', '2px solid red');
@@ -476,6 +486,10 @@
 			} else {
 				$('.smsbdy').css('border', '0 solid red');
 			}
+			if (templateID == "" || templateID == null) {
+				alert("Missing Template ID");
+				return false;
+			}
 
 			var mobiledata = [];
 			$(".sms_options").each(function() {
@@ -490,6 +504,7 @@
 					mobiledata: mobiledata,
 					smsbdy: smsbdy,
 					link_for: link_for,
+					templateID: templateID,
 					[csrfName]: csrfHash,
 				},
 				beforeSend: function(res) {

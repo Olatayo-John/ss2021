@@ -63,12 +63,12 @@ class Adminmodel extends CI_Model
 
 		$this->email->send();
 
-		$url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
+		// $url = "http://onextelbulksms.in/shn/api/pushsms.php?usr=621665&key=010BrbJ20v1c2eCc8LGih6RlTIGqKN&sndr=KARUNJ&ph=+91" . $mobile . "&text=";
 
-		$req = curl_init();
-		$complete_url = $url . curl_escape($req, $body) . "&rpt=1";
-		curl_setopt($req, CURLOPT_URL, $complete_url);
-		$result = curl_exec($req);
+		// $req = curl_init();
+		// $complete_url = $url . curl_escape($req, $body) . "&rpt=1";
+		// curl_setopt($req, CURLOPT_URL, $complete_url);
+		// $result = curl_exec($req);
 	}
 
 	public function update_user($id)
