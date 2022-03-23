@@ -67,27 +67,35 @@
 
 	<div class="">
 	<div class="row col-md-12 m-0 p-0 pb-3">
-			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
+			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
 						<h3 class="_apphit tapp"></h3>
-						<span>AppHit</span>
+						<span>App Hit</span>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
+			<!-- <div class="col-lg-3 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
-						<h3 class="_feedbck tl"></h3>
-						<span>Feedbacks</span>
+						<h3 class="_apphit tapp"></h3>
+						<span>Link Hit</span>
 					</div>
 				</div>
-			</div>
-			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
+			</div> -->
+			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
 						<h3 class="_feedbck links"></h3>
-						<span>Links</span>
+						<span>SMS</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
+				<div class="panel_s">
+					<div class="panel-body">
+						<h3 class="_feedbck tl"></h3>
+						<span>Votes</span>
 					</div>
 				</div>
 			</div>

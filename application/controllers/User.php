@@ -781,11 +781,11 @@ class User extends CI_Controller
 		}
 		$data['tl'] = $this->Usermodel->total_ratings();
 		$data['links'] = $this->Usermodel->all_sent_links();
-		$data['tl1'] = $this->Usermodel->total_1();
-		$data['tl2'] = $this->Usermodel->total_2();
-		$data['tl3'] = $this->Usermodel->total_3();
-		$data['tl4'] = $this->Usermodel->total_4();
-		$data['tl5'] = $this->Usermodel->total_5();
+		// $data['tl1'] = $this->Usermodel->total_1();
+		// $data['tl2'] = $this->Usermodel->total_2();
+		// $data['tl3'] = $this->Usermodel->total_3();
+		// $data['tl4'] = $this->Usermodel->total_4();
+		// $data['tl5'] = $this->Usermodel->total_5();
 		$data['tapp'] = $this->Usermodel->totalApp();
 		$data['token'] = $this->security->get_csrf_hash();
 		echo json_encode($data);

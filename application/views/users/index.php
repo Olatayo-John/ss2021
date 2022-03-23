@@ -71,10 +71,10 @@
 				</div>
 			</div>
 
-			<div class="sndasbtngrp mt-2">
+			<!-- <div class="sndasbtngrp mt-2">
 				<button class="sndasmailbtn btn" style="background:#294a63;color:#fff">Send as Email</button>
 				<button class="sndassmsbtn btn" style="background:#294a63;color:#fff">Send as SMS</button>
-			</div>
+			</div> -->
 		</div>
 		<div class="col-md-7 p-0 allform">
 			<form action="<?php echo base_url('user/send_link'); ?>" method="post" id="gen_link_form" class="gen_link_form">
@@ -120,7 +120,7 @@
 					<input type="hidden" name="link_for" class="link_for">
 					<button class="btn smsimport" type="button" style="background:#294a63;color:#fff">Import Phonenumber in CSV format</button>
 					<a href="<?php echo base_url('user/sms_sample_csv'); ?>" class="email_sample_csv btn btn-danger">
-						<i class="fas fa-sms mr-2"></i>Download sample file</a>
+					Download sample file</a>
 				</div>
 
 				<div class=" form-group">
@@ -170,7 +170,7 @@
 				$('.csrf_hash').val(data.token);
 				$('.subj').val("Swachh Survekshan 2022");
 				$('.link_for').val('Swachh Survekshan');
-				$(".bdy").load("<?php echo base_url("body.txt"); ?>");
+				// $(".bdy").load("<?php echo base_url("body.txt"); ?>");
 				$(".smsbdy").load("<?php echo base_url("body.txt"); ?>");
 				$('.gen_link_form').hide();
 				$('.sndasbtngrp').show();
