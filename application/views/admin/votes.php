@@ -70,8 +70,24 @@
 			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
+						<h3 class="_feedbck links"></h3>
+						<span>Total SMS</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
+				<div class="panel_s">
+					<div class="panel-body">
+						<h3 class="_feedbck tl"></h3>
+						<span>Total Feedback</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
+				<div class="panel_s">
+					<div class="panel-body">
 						<h3 class="_apphit tapp"></h3>
-						<span>App Hit</span>
+						<span>Total AppHit</span>
 					</div>
 				</div>
 			</div>
@@ -83,22 +99,6 @@
 					</div>
 				</div>
 			</div> -->
-			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
-				<div class="panel_s">
-					<div class="panel-body">
-						<h3 class="_feedbck links"></h3>
-						<span>SMS</span>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-xs-12 col-md-12 total-column">
-				<div class="panel_s">
-					<div class="panel-body">
-						<h3 class="_feedbck tl"></h3>
-						<span>Votes</span>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 
@@ -153,7 +153,7 @@
 
 				<!-- <th data-field="Email" data-sortable="true">Email</th> -->
 
-				<th data-field="Votes" data-sortable="true">Votes</th>
+				<th data-field="Votes" data-sortable="true">Feedbacks</th>
 			</tr>
 		</thead>
 		<tbody class="bg-light">

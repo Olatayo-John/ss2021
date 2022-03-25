@@ -54,12 +54,12 @@
 					</li>
 
 					<li class="nav-item"><a href="<?php echo base_url('users') ?>" class="nav-link" style="<?php echo ($url == 'users') ? 'background-color: #0B3954' : '' ?>">
-							<i class="fas fa-user-shield"></i>Users</a>
+							<i class="fas fa-users"></i>Users</a>
 					</li>
 
-					<li class="nav-item"><a href="<?php echo base_url('account') ?>" class="nav-link" style="<?php echo ($url == 'account') ? 'background-color: #0B3954' : '' ?>">
-							<i class="fas fa-hourglass-half"></i>Account</a>
-					</li>
+					<!-- <li class="nav-item"><a href="<?php echo base_url('quota') ?>" class="nav-link" style="<?php echo ($url == 'account') ? 'background-color: #0B3954' : '' ?>">
+							<i class="fas fa-hourglass-half"></i>Quota</a>
+					</li> -->
 				<?php endif; ?>
 
 				<?php if ($this->session->userdata('rr_logged_inn') && $this->session->userdata('rr_admin') == "1") : ?>
@@ -74,6 +74,9 @@
 					</li>
 					<li class="nav-item"><a href="<?php echo base_url('rating') ?>" class="nav-link" style="<?php echo ($url == 'rating') ? 'background-color: #0B3954' : '' ?>">
 							<i class="fas fa-link"></i>Send Link</a>
+					</li>
+					<li class="nav-item"><a href="<?php echo base_url('account') ?>" class="nav-link" style="<?php echo ($url == 'account') ? 'background-color: #0B3954' : '' ?>">
+							<i class="fas fa-hourglass-half"></i>Account</a>
 					</li>
 				<?php endif; ?>
 

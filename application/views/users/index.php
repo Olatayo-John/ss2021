@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/index.css'); ?>">
 
 
-<div class="pl-5 pr-5 mt-5">
+<div class="p-4">
 	<div class="emailmodal modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -40,43 +40,32 @@
 		</div>
 	</div>
 	
-	<div class="row">
-		<div class="col-md-5 p-0">
-			<!-- <label style="color: #294a63">Invite citizens for rating</label><br> -->
-			<h4 style="color: #294a63">Invite citizens for rating</h4>
+	<div class="">
+		<div class="">
+			<!-- <h4 style="color: #294a63">Invite citizens for rating</h4>
 			<div class="form-check ml-3">
 				<input type="radio" class="form-check-input" name="link" value="ow" id="ow" checked="true">
 				<label class="form-check-label" for="ow">Swachh Survekshan 2022</label>
-			</div>
-			<!-- <div class="form-check ml-3">
-				<input type="radio" class="form-check-input" name="link" value="dlink" id="dlink">
-				<label class="form-check-label" for="dlink">Direct Link</label>
 			</div> -->
-			<br>
 
 			<div class="form-group">
-				<!-- <label style="color: #294a63">Links</label><br> -->
 				<h4 style="color: #294a63">Links</h4>
-				<div class="form-check form-check-inline ml-3">
+				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="linkTosend" value="vote" id="vlink" checked="true" templateID="1007176208355786033">
-					<label class="form-check-label" for="vlink">Voting Link</label>
+					<label class="form-check-label" for="vlink">Feedback</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="linkTosend" value="app" id="alink" templateID="1007884458040467388">
-					<label class="form-check-label" for="alink">App Link</label>
+					<label class="form-check-label" for="alink">App</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="linkTosend" value="both" id="blink" templateID="">
 					<label class="form-check-label" for="blink">Both</label>
 				</div>
 			</div>
-
-			<!-- <div class="sndasbtngrp mt-2">
-				<button class="sndasmailbtn btn" style="background:#294a63;color:#fff">Send as Email</button>
-				<button class="sndassmsbtn btn" style="background:#294a63;color:#fff">Send as SMS</button>
-			</div> -->
 		</div>
-		<div class="col-md-7 p-0 allform">
+		<hr>
+		<div class="allform">
 			<form action="<?php echo base_url('user/send_link'); ?>" method="post" id="gen_link_form" class="gen_link_form">
 				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name() ?>" value="<?php echo $this->security->get_csrf_hash() ?>" class="csrf_hash">
 				<input type="hidden" name="userid" value="<?php echo $this->session->userdata('rr_id'); ?>" class="userid">

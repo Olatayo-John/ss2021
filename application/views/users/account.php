@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/account.css'); ?>">
 
 
-<div class="p-5 pt-0">
+<div class="p-3 pt-0">
 	<?php if ($this->session->userdata("rr_admin") === "1") : ?>
 		<label class="pl-3">Quota</label>
 		<div class="row col-md-12 m-0 p-0 pb-5">
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 
-		<label class="pl-3">Links</label>
+		<!-- <label class="pl-3">Links</label>
 		<div class="row col-md-12 m-0 p-0 pb-5">
 			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
@@ -49,28 +49,60 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="col-lg-4 col-xs-12 col-md-12 total-column">
+			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
 				<div class="panel_s">
 					<div class="panel-body">
 						<h3 class="_total"><?php echo $all_email[0]->email ?></h3>
 						<span>Emails</span>
 					</div>
 				</div>
-			</div> -->
-		</div>
+			</div>
+		</div> -->
+	<?php endif; ?>
 
-		<label class="pl-3">Feedbacks</label>
-		<div class="row col-md-12 m-0 p-0 pb-5">
-			<div class="col-lg-4 col-xs-12 col-md-12 total-column">
-				<div class="panel_s">
-					<div class="panel-body">
-						<h3 class="_total"><?php echo ($tr) ?></h3>
-						<span>Feedbacks</span>
-					</div>
+	<label class="pl-3">Feedback</label>
+	<div class="row col-md-12 m-0 p-0 pb-5">
+		<div class="col-lg-6 col-xs-12 col-md-12 total-column">
+			<div class="panel_s">
+				<div class="panel-body">
+					<h3 class="_total"><?php echo ($user[0]['total_links']) ?></h3>
+					<span>Your Total Feedbacks</span>
 				</div>
 			</div>
 		</div>
-	<?php endif; ?>
+		<div class="col-lg-6 col-xs-12 col-md-12 total-column">
+			<div class="panel_s">
+				<div class="panel-body">
+					<h3 class="_total"><?php echo ($userToday) ?></h3>
+					<span>Your Feedbacks Today</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<table id="FBackTable" data-toggle="table" data-search="true" data-show-export="true" data-buttons-prefix="btn-md btn" data-buttons-align="left" data-pagination="true" data-sticky-header="true" data-sticky-header-offset-y="0" tablename="Votes" data-buttons=buttons style="white-space:nowrap;">
+		<thead class="text-light" style="background:#223b55;">
+			<tr>
+				<th data-field="IP" data-sortable="true">IP</th>
+
+				<th data-field="Name" data-sortable="true">Name</th>
+
+				<th data-field="Mobile" data-sortable="true">Mobile</th>
+
+				<th data-field="Date" data-sortable="true">Date</th>
+			</tr>
+		</thead>
+		<tbody class="bg-light">
+			<?php foreach ($userRating as $u) : ?>
+				<tr class="text-dark">
+					<td class><?php echo $u['user_ip'] ?></td>
+					<td class><?php echo $u['name'] ?></td>
+					<td class><?php echo $u['mobile'] ?></td>
+					<td class><?php echo $u['rated_at'] ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 </div>
 
 

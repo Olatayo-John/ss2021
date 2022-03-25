@@ -286,6 +286,25 @@ class Usermodel extends CI_Model
 		return $query->result_array();
 	}
 
+	public function user_total_ratings_today()
+	{
+		// $query = $this->db->get_where('mainweb_rating', array('c_id' => $this->session->userdata('rr_form_key')));
+		// return $query->result_array();
+
+		$todayDate= date("Y-m-d");
+		$this->db->where(array('c_id' => $this->session->userdata('rr_form_key')));
+        $this->db->like('rated_at', $todayDate);
+		$query = $this->db->get('mainweb_rating');
+		return $query->num_rows();
+	}
+
+	public function get_user_ratings()
+	{
+		$query = $this->db->get_where('mainweb_rating', array('c_id' => $this->session->userdata('rr_form_key')));
+		return $query->result_array();
+
+	}
+
 	public function all_user_sms()
 	{
 		$this->db->select_sum('sms');

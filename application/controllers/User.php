@@ -146,6 +146,8 @@ class User extends CI_Controller
 
 		if ($this->form_validation->run() === FALSE) {
 			$data['info'] = $this->Usermodel->get_info();
+			$data['user'] = $this->Usermodel->user_total_ratings(); //all user rating
+		$data['userToday'] = $this->Usermodel->user_total_ratings_today(); //all user rating
 
 			$this->load->view('templates/header');
 			$this->load->view('users/edit', $data);
@@ -761,9 +763,11 @@ class User extends CI_Controller
 			$this->session->set_flashdata('err', 'Please login first');
 			redirect('user');
 		}
-		$data['user'] = $this->Usermodel->user_total_ratings();
-		$data['tr'] = $this->Usermodel->total_ratings();
-		$data['balance'] = $this->Usermodel->user_balance();
+		$data['user'] = $this->Usermodel->user_total_ratings(); //all user total rating
+		$data['userRating'] = $this->Usermodel->get_user_ratings(); //get all user rating
+		$data['userToday'] = $this->Usermodel->user_total_ratings_today(); //all user rating
+		$data['tr'] = $this->Usermodel->total_ratings(); //all rating
+		$data['balance'] = $this->Usermodel->user_balance(); //quota detail
 		$data['all_sms'] = $this->Usermodel->all_user_sms();
 		$data['all_email'] = $this->Usermodel->all_user_email();
 		$data['sent_links'] = $this->Usermodel->all_sent_links();

@@ -1,5 +1,25 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/edit.css'); ?>">
-<div class="container col-md-6 pb-5 pt-5">
+<div class="container col-md-10 pb-5 pt-5">
+
+	<!-- <div class="row col-md-12 m-0 p-0 pb-5">
+		<div class="col-lg-6 col-xs-12 col-md-12 total-column">
+			<div class="panel_s">
+				<div class="panel-body">
+					<h3 class="_total"><?php echo ($user[0]['total_links']) ?></h3>
+					<span>Your Total Feedbacks</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-xs-12 col-md-12 total-column">
+			<div class="panel_s">
+				<div class="panel-body">
+					<h3 class="_total"><?php echo ($userToday) ?></h3>
+					<span>Your Feedbacks today</span>
+				</div>
+			</div>
+		</div>
+	</div> -->
+
 	<form action="<?php echo base_url('profile'); ?>" method="post" class="editform">
 
 		<input type="hidden" class="csrf_token" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
@@ -38,7 +58,7 @@
 
 		<div class="form-group">
 			<div class="d-flex justify-content-between">
-				<label class="mb-0">Voting Link</label>
+				<label class="mb-0">Feedback Link</label>
 				<span class="linkcopyalert text-danger text-right" style="display: none;"><strong>Link copied!</strong></span>
 			</div>
 			<input type="text" name="form_key" id="form_key" class="form-control form_key" value="<?php echo base_url() . "rate/" . $info->form_key ?>" readonly>

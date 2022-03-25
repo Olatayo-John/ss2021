@@ -61,6 +61,7 @@ $route['logout'] = 'user/logout';
 $route['profile'] = 'user/edit';
 $route['rating'] = 'user/rating';
 $route['account'] = 'user/account';
+$route['quota'] = 'user/account';
 $route['get-link'] = 'user/get_link';
 
 $route['sms-import'] = 'user/sms_importcsv';
