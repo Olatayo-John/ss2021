@@ -278,7 +278,7 @@ class User extends CI_Controller
 
 				//votingFile
 				$myfile = fopen("body.txt", "w") or die("Unable to open file!");
-				$txt = "Make Bulandshahar No.1\r\n";
+				$txt = "Make Shikarpur No.1\r\n";
 				fwrite($myfile, $txt);
 				$txt = "Vote your feedback\r\n";
 				fwrite($myfile, $txt);
@@ -304,7 +304,7 @@ class User extends CI_Controller
 
 				//BothFile
 				$myfile = fopen("Bothbody.txt", "w") or die("Unable to open file!");
-				$txt = "Make Bulandshahar No.1\r\n";
+				$txt = "Make Shikarpur No.1\r\n";
 				fwrite($myfile, $txt);
 				$txt = "Vote your feedback\r\n";
 				fwrite($myfile, $txt);
@@ -359,7 +359,7 @@ class User extends CI_Controller
 		} else if ($_POST['val'] && $_POST['val'] === 'ow') {
 			//votingFile
 			$myfile = fopen("body.txt", "w") or die("Unable to open file!");
-			$txt = "Make Bulandshahar No.1\r\n";
+			$txt = "Make Shikarpur No.1\r\n";
 			fwrite($myfile, $txt);
 			$txt = "Vote your feedback\r\n";
 			fwrite($myfile, $txt);
@@ -384,7 +384,7 @@ class User extends CI_Controller
 			fclose($myfile);
 
 			//BothFile
-			$txt = "Make Bulandshahar No.1\r\n";
+			$txt = "Make Shikarpur No.1\r\n";
 			fwrite($myfile, $txt);
 			$txt = "Vote your feedback\r\n";
 			fwrite($myfile, $txt);

@@ -25,8 +25,7 @@
 						</div>
 						<div class="form-group">
 							<label><span class="text-danger font-weight-bolder">* </span>Mobile</label>
-							<!-- <input type="number" name="mobile" class="form-control mobile" placeholder="Mobile"> -->
-							<input type="number" name="mobile" class="form-control mobile" placeholder="Mobile" value="7777777777">
+							<input type="number" name="mobile" class="form-control mobile" placeholder="Mobile">
 							<div class="text-dark text-right font-weight-bolder mobileerr" style="display: none;">Invalid mobile length</div>
 							<input type="checkbox" name="mobile_chkbox" class="mr-2 ml-2 mobile_chkbox"><span class="text-danger mobile_chkbox_span">Send Login Credentails via SMS?</span>
 						</div>
