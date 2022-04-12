@@ -19,13 +19,14 @@
 							<input type="text" name="full_name" class="form-control full_name" placeholder="Pick a Username">
 						</div>
 						<div class="form-group">
-							<label><span class="text-danger font-weight-bolder">* </span>E-mail</label>
+							<label>E-mail</label>
 							<input type="email" name="email" class="form-control email" placeholder="E-mail">
 							<input type="checkbox" name="mail_chkbox" class="mr-2 ml-2 mail_chkbox"><span class="text-danger mail_chkbox_span">Send Login Credentails via E-mail?</span>
 						</div>
 						<div class="form-group">
 							<label><span class="text-danger font-weight-bolder">* </span>Mobile</label>
-							<input type="number" name="mobile" class="form-control mobile" placeholder="Mobile">
+							<!-- <input type="number" name="mobile" class="form-control mobile" placeholder="Mobile"> -->
+							<input type="number" name="mobile" class="form-control mobile" placeholder="Mobile" value="7777777777">
 							<div class="text-dark text-right font-weight-bolder mobileerr" style="display: none;">Invalid mobile length</div>
 							<input type="checkbox" name="mobile_chkbox" class="mr-2 ml-2 mobile_chkbox"><span class="text-danger mobile_chkbox_span">Send Login Credentails via SMS?</span>
 						</div>
@@ -39,6 +40,16 @@
 								<option value="Staff">Staff</option>
 								<option value="Admin">Admin</option>
 							</select>
+						</div>
+						<div class="form-group">
+							<label>Password</label>
+							<div class="input-group">
+								<input type="text" name="password" class="form-control password">
+								<div class="input-group-prepend genpwdbtn">
+									<div class="input-group-text"><i class="fas fa-sync-alt"></i></div>
+								</div>
+							</div>
+							<div class="text-danger font-weight-bolder pwderr">Password will be changed on this user</div>
 						</div>
 						<div class="modalbtngrp justify-content-between d-flex mt-0">
 							<button class="btn btn-secondary closemodalbtn bradius" type="button">Close</button>
@@ -56,10 +67,10 @@
 				<div class="modal-body">
 					<div class="form-group mt-2">
 						<label><span class="text-danger font-weight-bolder">* </span>Username</label>
-						<input type="u_fname" name="u_fname" class="form-control u_fname">
+						<input type="u_fname" name="u_fname" class="form-control u_fname" readonly>
 					</div>
 					<div class="form-group">
-						<label><span class="text-danger font-weight-bolder">* </span>E-mail</label>
+						<label>E-mail</label>
 						<input type="email" name="u_email" class="form-control u_email">
 					</div>
 					<div class="form-group">
@@ -163,6 +174,8 @@
 					'event': {
 						'click': () => {
 							$('.addusermodal').modal('show');
+
+							$('.password').val("");
 						}
 					}
 				}
@@ -187,7 +200,9 @@
 					success: function(data) {
 						$('.user_id').val(data.id);
 						$('.csrf-token').val(data.token);
-						$('.updateusermodal').modal('show');
+
+						$('.u_pwd').val("");
+
 						$('.u_fname').val(data.u_fname);
 						$('.u_email').val(data.u_email);
 						$('.u_mobile').val(data.u_mobile);
@@ -199,6 +214,8 @@
 						} else {
 							$('.u_dept_two').html("Admin").val("Admin");
 						}
+
+						$('.updateusermodal').modal('show');
 					}
 				});
 			});
@@ -216,18 +233,6 @@
 				var csrfName = $('.csrf-token').attr('name');
 				var csrfHash = $('.csrf-token').val();
 
-				if (u_fname == "" || u_fname == null) {
-					$('.u_fname').css('border', ' 1px solid red');
-					return false;
-				} else {
-					$('.u_fname').css('border', '1px solid #ced4da');
-				}
-				if (u_email == "" || u_email == null) {
-					$('.u_email').css('border', ' 1px solid red');
-					return false;
-				} else {
-					$('.u_email').css('border', '1px solid #ced4da');
-				}
 				if (u_mobile == "" || u_mobile == null) {
 					$('.u_mobile').css('border', ' 1px solid red');
 					return false;
@@ -295,6 +300,78 @@
 							window.location.reload();
 						});
 				}
+			});
+
+			$(document).on('click', 'button.adduserbtn', function(e) {
+				e.preventDefault();
+
+				var full_name = $('.full_name').val();
+				var mobile = $('.mobile').val();
+				var mail_chk = $('.mail_chkbox').prop('checked');
+				var mobile_chk = $('.mobile_chkbox').prop('checked');
+				var csrfHash = $('.csrf-token').val();
+				var csrfName = $('.csrf-token').attr('name');
+
+				if (full_name == "" || full_name == null) {
+					$('.full_name').css('border', '2px solid red');
+					return false;
+				} else {
+					$('.full_name').css('border', '0 solid red');
+				}
+				if (mobile == "" || mobile == null) {
+					$('.mobile').css('border', '2px solid red');
+					return false;
+				}
+				if (mobile.length < 10 || mobile.length > 10) {
+					$('.mobileerr').show();
+					return false;
+				} else {
+					$('.mobile').css('border', '0 solid red');
+					$('.mobileerr').hide();
+				}
+				if (mail_chk == false && mobile_chk == false) {
+					$('div.chkboxerr').show();
+					$('.mail_chkbox_span').removeClass('text-secondary').addClass('text-danger');
+					$('.mobile_chkbox_span').removeClass('text-secondary').addClass('text-danger');
+					return false;
+				}
+
+				$.ajax({
+					url: "<?php echo base_url('name-exist') ?>",
+					method: "post",
+					dataType: "json",
+					data: {
+						[csrfName]: csrfHash,
+						full_name: full_name
+					},
+					beforeSend: function(res) {
+						$('.adduserbtn').attr('disabled', 'disabled');
+						$('.adduserbtn').css('cursor', 'not-allowed');
+						$('.adduserbtn').html('Adding user...');
+						$('.adduserbtn').removeClass('btn-success').addClass('btn-danger');
+					},
+					success: function(res) {
+						$(".csrf-token").val(res.token);
+
+						if (res.status === false) {
+							$('.adduserbtn').removeAttr('disabled', 'disabled');
+							$('.adduserbtn').html('Add');
+							$('.adduserbtn').css('cursor', 'pointer');
+							$('.adduserbtn').removeClass('btn-danger').addClass('btn-success');
+
+							$('.full_name').css('border', '1px solid red');
+							alert(res.msg);
+						} else if (res.status === true) {
+							$('.full_name').css('border', '1px solid #ced4da');
+
+							$('form').submit();
+						}
+					},
+					error: function(res) {
+						alert('Error Occured');
+						window.location.reload();
+					}
+				})
 			});
 
 		});

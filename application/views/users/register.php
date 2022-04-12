@@ -6,7 +6,7 @@
 		<input type="hidden" class="csrf_token" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 		<div class="form-group">
 			<label><span class="text-danger">* </span>Username</label>
-			<input type="text" name="full_name" class="form-control full_name" autofocus placeholder="Pick a Username"  value="<?php echo set_value('full_name'); ?>">
+			<input type="text" name="full_name" class="form-control full_name" autofocus placeholder="Pick a Username" value="<?php echo set_value('full_name'); ?>">
 		</div>
 		<div class="form-group">
 			<label>E-mail</label>
@@ -70,6 +70,8 @@
 			var full_name = $('.full_name').val();
 			var mobile = $('.mobile').val();
 			var pass = $('.pass').val();
+			var csrfName = $(".csrf_token").attr('name');
+			var csrfHash = $(".csrf_token").val();
 
 			if (full_name == "" || full_name == null) {
 				$('.full_name').css('border', '1px solid red');
@@ -80,7 +82,8 @@
 			if (mobile == "" || mobile == null) {
 				$('.mobile').css('border', '1px solid red');
 				return false;
-			}if (mobile.length < 10 || mobile.length > 10) {
+			}
+			if (mobile.length < 10 || mobile.length > 10) {
 				$('.mobileerr').show();
 				return false;
 			} else {
@@ -90,20 +93,52 @@
 			if (pass == "" || pass == null) {
 				$('.passerr').text("Enter a Password").show();
 				return false;
-			}if (pass.length < 6) {
+			}
+			if (pass.length < 6) {
 				$('.passerr').text("Password should be over 6characters").show();
 				return false;
-			}  else {
+			} else {
 				$('.pass').css('border', '1px solid #ced4da');
 				$('.passerr').hide();
 			}
+
+
 			$.ajax({
-				success: function() {
+				url: "<?php echo base_url('name-exist') ?>",
+				method: "post",
+				dataType: "json",
+				data: {
+					[csrfName]: csrfHash,
+					full_name: full_name
+				},
+				beforeSend: function(res) {
 					$('.registerbtn').attr('disabled', 'disabled');
 					$('.registerbtn').html('Processing...');
 					$('.registerbtn').css('cursor', 'not-allowed');
+				},
+				success: function(res) {
+					// console.log(res);
+					$(".csrf_token").val(res.token);
+
+					if (res.status === false) {
+						$('.registerbtn').removeAttr('disabled', 'disabled');
+						$('.registerbtn').html('Register');
+						$('.registerbtn').css('cursor', 'pointer');
+
+						$('.full_name').css('border', '1px solid red');
+						alert(res.msg);
+					} else if (res.status === true) {
+						$('.full_name').css('border', '1px solid #ced4da');
+
+						$('form').submit();
+					}
+				},
+				error: function(res) {
+					alert('Error Occured');
+
+					window.location.reload();
 				}
-			});
+			})
 		});
 	});
 </script>

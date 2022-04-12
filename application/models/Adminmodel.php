@@ -5,14 +5,14 @@ class Adminmodel extends CI_Model
 {
 	public function get_user_details($limit = false, $offset = false)
 	{
-		$this->db->limit($limit, $offset);
+		// $this->db->limit($limit, $offset);
 		$query = $this->db->get('users');
 		return $query;
 	}
 
 	public function get_user_votes($limit = false, $offset = false)
 	{
-		$this->db->limit($limit, $offset);
+		// $this->db->limit($limit, $offset);
 		$query = $this->db->get('user_details');
 		return $query;
 	}
@@ -78,30 +78,27 @@ class Adminmodel extends CI_Model
 			$email = htmlentities($this->input->post('u_email'));
 			$mobile = htmlentities($this->input->post('u_mobile'));
 			$randpwd = $this->input->post('u_pwd');
-			$link = base_url() . "user/rate/" . $this->input->post('u_link');
+			$link = base_url() . "user/rate/" . htmlentities($this->input->post('u_link'));
+
 			$login_link = base_url();
 			$this->upate_password($fname, $randpwd, $email, $link, $login_link, $mobile);
+			
 			if ($this->input->post('deptselect') == "Admin") {
 				$data = array(
 					'admin' => "1",
-					'full_name' => htmlentities($this->input->post('u_fname')),
 					'email' => htmlentities($this->input->post('u_email')),
 					'mobile' => htmlentities($this->input->post('u_mobile')),
 					'eid' => htmlentities($this->input->post('u_eid')),
 					'dept' => htmlentities($this->input->post('deptselect')),
 					'password' => password_hash($this->input->post('u_pwd'), PASSWORD_DEFAULT)
 				);
-
 				$this->db->where('id', $id);
 				$this->db->update('users', $data);
-				$name = htmlentities($this->input->post('u_fname'));
-				$this->update_user_admin($id, $name);
 				return TRUE;
 				exit;
 			} elseif ($this->input->post('deptselect') == "Staff") {
 				$data = array(
 					'admin' => "0",
-					'full_name' => htmlentities($this->input->post('u_fname')),
 					'email' => htmlentities($this->input->post('u_email')),
 					'mobile' => htmlentities($this->input->post('u_mobile')),
 					'eid' => htmlentities($this->input->post('u_eid')),
@@ -110,8 +107,6 @@ class Adminmodel extends CI_Model
 				);
 				$this->db->where('id', $id);
 				$this->db->update('users', $data);
-				$name = htmlentities($this->input->post('u_fname'));
-				$this->update_user_admin($id, $name);
 				return TRUE;
 				exit();
 			}
@@ -119,23 +114,18 @@ class Adminmodel extends CI_Model
 			if ($this->input->post('deptselect') == "Admin") {
 				$data = array(
 					'admin' => "1",
-					'full_name' => htmlentities($this->input->post('u_fname')),
 					'email' => htmlentities($this->input->post('u_email')),
 					'mobile' => htmlentities($this->input->post('u_mobile')),
 					'eid' => htmlentities($this->input->post('u_eid')),
 					'dept' => htmlentities($this->input->post('deptselect')),
 				);
-
 				$this->db->where('id', $id);
 				$this->db->update('users', $data);
-				$name = htmlentities($this->input->post('u_fname'));
-				$this->update_user_admin($id, $name);
 				return TRUE;
 				exit;
 			} elseif ($this->input->post('deptselect') == "Staff") {
 				$data = array(
 					'admin' => "0",
-					'full_name' => htmlentities($this->input->post('u_fname')),
 					'email' => htmlentities($this->input->post('u_email')),
 					'mobile' => htmlentities($this->input->post('u_mobile')),
 					'eid' => htmlentities($this->input->post('u_eid')),
@@ -143,8 +133,6 @@ class Adminmodel extends CI_Model
 				);
 				$this->db->where('id', $id);
 				$this->db->update('users', $data);
-				$name = htmlentities($this->input->post('u_fname'));
-				$this->update_user_admin($id, $name);
 				return TRUE;
 				exit();
 			}

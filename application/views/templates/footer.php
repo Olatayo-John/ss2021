@@ -1,4 +1,4 @@
-<button onclick="topFunction()" id="scrollbtn" class="btn text-light" style="width: 70px"><i class="fas fa-caret-up mr-2"></i>Top</button>
+<!-- <button onclick="topFunction()" id="scrollbtn" class="btn text-light" style="width: 70px"><i class="fas fa-caret-up mr-2"></i>Top</button> -->
 
 <style type="text/css">
 	#scrollbtn {
@@ -50,6 +50,17 @@
 
 	}
 	// setTimeout(() => document.querySelector('div.alert').remove(), 6000);
+
+	$(document).ready(function() {
+		$(document).on('', '', function(e) {
+			e.preventDefault();
+
+			var uname = $(this).val();
+			var csrfName = $(".csrf_token").attr('name');
+			var csrfHash = $(".csrf_token").val();
+
+		});
+	});
 </script>
 </body>
 

@@ -52,6 +52,9 @@ div.alert{
 	animation-fill-mode: forwards;
 	animation-duration: 2s;
 }
+strong p{
+	margin: 0 !important;
+}
 @keyframes alert{
 	0%{
 		opacity: 0;

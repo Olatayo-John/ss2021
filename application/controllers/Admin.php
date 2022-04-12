@@ -108,100 +108,77 @@ class Admin extends CI_Controller
 			$this->session->set_flashdata('acces_denied', 'Access Denied.');
 			redirect('login');
 		}
-		$this->form_validation->set_rules('full_name', 'Full Name', 'required|trim|html_escape');
+		$this->form_validation->set_rules('full_name', 'Username', 'required|trim|html_escape|is_unique[users.full_name]');
 		$this->form_validation->set_rules('email', 'E-mail', 'trim|valid_email|html_escape');
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|html_escape');
 		$this->form_validation->set_rules('eid', 'Employee ID', 'trim|html_escape');
 		$this->form_validation->set_rules('dept', 'Department', 'trim|html_escape');
+		$this->form_validation->set_rules('password', 'Password', 'trim|html_escape');
 
 		if ($this->form_validation->run() === FALSE) {
 			$data['details'] = $this->Adminmodel->get_user_details();
+			$data['users'] = $this->Adminmodel->get_user_details(false, false);
+
 			$this->load->view('templates/header');
-			$this->load->view('admin/index', $data);
+			$this->load->view('admin/users', $data);
 			$this->load->view('templates/footer');
 		} else {
 			$form_key =  mt_rand(0, 10000) . substr($this->input->post('mobile'), -4);
-			$randpwd =  mt_rand(0, 10000000);
-			// $form_key = md5($rand);
+			$randpwd = ($this->input->post('password') ? $this->input->post('password') : mt_rand(0, 10000000));
 			$pwd = password_hash($randpwd, PASSWORD_DEFAULT);
-			$res = $this->Usermodel->register($form_key, $pwd);
-			// $res = true;
-			if ($res !== TRUE) {
-				$this->session->set_flashdata('err', 'Registration Failed');
-				redirect('register');
-			} else {
-				if (isset($_POST['mail_chkbox']) && isset($_POST['mobile_chkbox'])) {
-					$fname = htmlentities($this->input->post('full_name'));
-					$email = htmlentities($this->input->post('email'));
-					$link = base_url() . "rate/" . $form_key;
-					$mobile = htmlentities($this->input->post('mobile'));
-					$login_link = base_url();
 
-					//send email
-					$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
+			$fname = htmlentities($this->input->post('full_name'));
+			$email = htmlentities($this->input->post('email'));
+			$mobile = $this->input->post('mobile');
+			$link = base_url() . "rate/" . $form_key;
+			$login_link = base_url();
 
-					//send sms
-					$bdy = "Hello " . $fname . "\n\nBelow are your login details :\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to collect Feedbacks.\r\nNIPL";
-					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
-					$req = curl_init();
-					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007838850146399750&rpt=1";
-					curl_setopt($req, CURLOPT_URL, $complete_url);
-					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
-					$result = curl_exec($req);
+			$mailRes = $mobileRes = null; //default values
 
-					$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
-					$Jresult = json_decode($result, true);
+			if (isset($_POST['mail_chkbox'])) {
+				//send mail
+				$mailRes = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
+				// $mailRes = true;
+			}
+			if (isset($_POST['mobile_chkbox'])) {
+				$bdy = "Hello " . $fname . "\n\nBelow are your login details :\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to collect Feedbacks.\r\nNIPL";
+				$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
+				$req = curl_init();
+				$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007838850146399750&rpt=1";
+				curl_setopt($req, CURLOPT_URL, $complete_url);
+				curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
+				$result = curl_exec($req);
 
+				$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
+				$Jresult = json_decode($result, true);
+
+				if ($httpCode !== 200) {
+					$mobileRes = 'Error sending SMS. Error code ' . $httpCode;
+				} else {
 					if ($Jresult['STATUS'] == "ERROR") {
-						$this->session->set_flashdata('err', 'User added.<br>Error. ' . $Jresult['RESPONSE']['INFO']);
-						redirect($_SERVER['HTTP_REFERER']);
+						$mobileRes = 'Error sending SMS. ' . $Jresult['RESPONSE']['INFO'];
 					} else if ($Jresult['STATUS'] == "OK") {
-						$this->session->set_flashdata('succ', 'User added. Login credentials sent to user e-mail and mobile');
-						redirect($_SERVER['HTTP_REFERER']);
+						$mobileRes = true;
 					}
+				}
 
-					curl_close($req);
-				} elseif (isset($_POST['mail_chkbox'])) {
-					$fname = htmlentities($this->input->post('full_name'));
-					$email = htmlentities($this->input->post('email'));
-					$link = base_url() . "rate/" . $form_key;
-					$mobile = $this->input->post('mobile');
-					$login_link = base_url();
-					$res = $this->send_succ($fname, $randpwd, $email, $link, $login_link);
-					$this->session->set_flashdata('succ', 'User added. Login credentials sent to user e-mail');
+				curl_close($req);
+				$mailRes = true;
+			}
+
+			//handle Error
+			if ($mailRes !== true) {
+				$this->session->set_flashdata('err', $mailRes);
+				redirect($_SERVER['HTTP_REFERER']);
+			} else {
+				$regRes = $this->Usermodel->register($form_key, $pwd);
+
+				if ($regRes === true) {
+					$this->session->set_flashdata('succ', 'User Added');
 					redirect($_SERVER['HTTP_REFERER']);
-				} elseif (isset($_POST['mobile_chkbox'])) {
-					$fname = htmlentities($this->input->post('full_name'));
-					$email = htmlentities($this->input->post('email'));
-					$link = base_url() . "rate/" . $form_key;
-					$mobile = $this->input->post('mobile');
-					$login_link = base_url();
-
-					$bdy = "Hello " . $fname . "\n\nBelow are your login details :\nUsername: " . $fname . "\nPassword: " . $randpwd . "\nLink: " . $link . "\nShare the above link to collect Feedbacks.\r\nNIPL";
-					$url = "http://savshka.in/api/pushsms?user=502893&authkey=926pJyyVe2aK&sender=SSURVE&mobile=" . $mobile . "&text=";
-					$req = curl_init();
-					$complete_url = $url . curl_escape($req, $bdy) . "&entityid=1001715674475461342&templateid=1007838850146399750&rpt=1";
-					curl_setopt($req, CURLOPT_URL, $complete_url);
-					curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
-					$result = curl_exec($req);
-
-					$httpCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
-					$Jresult = json_decode($result, true);
-
-					if ($httpCode !== 200) {
-						$this->session->set_flashdata('err', 'User added.<br>Error sending SMS. Error code ' . $httpCode);
-						redirect($_SERVER['HTTP_REFERER']);
-					} else {
-						if ($Jresult['STATUS'] == "ERROR") {
-							$this->session->set_flashdata('err', 'User added.<br>Error. ' . $Jresult['RESPONSE']['INFO']);
-							redirect($_SERVER['HTTP_REFERER']);
-						} else if ($Jresult['STATUS'] == "OK") {
-							$this->session->set_flashdata('succ', 'User added. Login credentials sent to user mobile');
-							redirect($_SERVER['HTTP_REFERER']);
-						}
-					}
-
-					curl_close($req);
+				} else {
+					$this->session->set_flashdata('err', 'Registration Failed');
+					redirect($_SERVER['HTTP_REFERER']);
 				}
 			}
 		}
@@ -235,7 +212,11 @@ class Admin extends CI_Controller
 		$this->email->subject("Login Credentials");
 		$this->email->message($body);
 
-		$this->email->send();
+		if ($this->email->send()) {
+			return true;
+		} else {
+			return $this->email->print_debugger();
+		};
 	}
 
 	public function get_user()

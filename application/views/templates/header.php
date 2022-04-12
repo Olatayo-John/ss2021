@@ -108,24 +108,14 @@
 		<?php if ($this->session->flashdata('acces_denied')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
 				<strong><?php echo $this->session->flashdata('acces_denied') ?></strong>
 			</div>
 		<?php endif; ?>
 
-		<?php if (form_error('subj') || form_error('body') || form_error('email') || form_error('uname') || form_error('pwd')) : ?>
+		<?php if (validation_errors()) : ?>
 			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong>Please fill in all fields</strong>
-			</div>
-		<?php endif; ?>
-
-		<?php if (form_error('sentcode')) : ?>
-			<div class="alert alert-danger">
-				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
-				<strong>Verification code is required to activate your account</strong>
+			<button class="close" data-dismiss="alert">&times;</button>
+				<strong><?php echo validation_errors(); ?></strong>
 			</div>
 		<?php endif; ?>
 
@@ -133,7 +123,6 @@
 		<?php if ($this->session->flashdata('err')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-exclamation-circle text-danger"></i>
 				<strong><?php echo $this->session->flashdata('err') ?></strong>
 			</div>
 		<?php endif; ?>
@@ -142,7 +131,6 @@
 		<?php if ($this->session->flashdata('succ')) : ?>
 			<div class="alert alert-success">
 				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-success"></i>
 				<strong><?php echo $this->session->flashdata('succ') ?></strong>
 			</div>
 		<?php endif; ?>
@@ -151,7 +139,6 @@
 		<?php if ($this->session->flashdata('log_out')) : ?>
 			<div class="alert alert-danger">
 				<button class="close" data-dismiss="alert">&times;</button>
-				<i class="fas fa-check-circle text-danger"></i>
 				<strong><?php echo $this->session->flashdata('log_out') ?></strong>
 			</div>
 		<?php endif; ?>

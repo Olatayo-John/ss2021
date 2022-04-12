@@ -80,7 +80,7 @@ class User extends CI_Controller
 			$this->session->set_flashdata('err', 'Log out first.');
 			redirect($_SERVER['HTTP_REFERER']);
 		}
-		$this->form_validation->set_rules('full_name', 'Full Name', 'required|trim|html_escape');
+		$this->form_validation->set_rules('full_name', 'Username', 'required|trim|html_escape|is_unique[users.full_name]');
 		$this->form_validation->set_rules('email', 'E-mail', 'trim|valid_email|html_escape');
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|html_escape');
 		$this->form_validation->set_rules('eid', 'Employee ID', 'trim|html_escape');
@@ -91,6 +91,7 @@ class User extends CI_Controller
 			$this->load->view('users/register');
 			$this->load->view('templates/footer');
 		} else {
+			die;
 			$form_key =  mt_rand(0, 10000) . substr($this->input->post('mobile'), -4);
 			$randpwd =  mt_rand(0, 10000000);
 
@@ -133,6 +134,42 @@ class User extends CI_Controller
 		}
 	}
 
+	function testData($data){
+		$data= trim($data);
+		$data= stripcslashes($data);
+		$data= htmlentities($data);
+
+		return $data;
+	}
+
+	public function username_exist()
+	{
+		if (count($_POST) > 0) {
+			if (isset($_POST['full_name']) && !empty($_POST['full_name']) && $_POST['full_name'] !== "" && $_POST['full_name'] !== null) {
+				$uname = $this->testData($_POST['full_name']);
+				$res = $this->Usermodel->username_exit($uname);
+
+				if ($res === true) {
+					$data['status'] = false;
+					$data['msg'] = "Username Taken";
+				} elseif ($res === false) {
+					$data['status'] = true;
+					$data['msg'] = "Username Available";
+				}
+			} else {
+				$data['status'] = false;
+				$data['msg'] = "Invalid Name provided";
+			}
+		} else {
+			$data['status'] = false;
+			$data['msg'] = "No Name provided";
+		}
+
+		$data['token'] = $this->security->get_csrf_hash();
+		$data['uname'] = $uname;
+		echo json_encode($data);
+	}
+
 	public function edit()
 	{
 		if (!$this->session->userdata('rr_logged_in')) {
@@ -147,7 +184,7 @@ class User extends CI_Controller
 		if ($this->form_validation->run() === FALSE) {
 			$data['info'] = $this->Usermodel->get_info();
 			$data['user'] = $this->Usermodel->user_total_ratings(); //all user rating
-		$data['userToday'] = $this->Usermodel->user_total_ratings_today(); //all user rating
+			$data['userToday'] = $this->Usermodel->user_total_ratings_today(); //all user rating
 
 			$this->load->view('templates/header');
 			$this->load->view('users/edit', $data);

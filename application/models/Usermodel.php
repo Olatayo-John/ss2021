@@ -36,6 +36,16 @@ class Usermodel extends CI_Model
 		}
 	}
 
+	public function username_exit($uname)
+	{
+		$query = $this->db->get_where('users', array('full_name' => $uname));
+		if ($query->num_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function register($form_key, $pwd)
 	{
 		if ($this->input->post('dept') == "Staff") {
@@ -50,6 +60,8 @@ class Usermodel extends CI_Model
 				'form_key' => $form_key,
 				'password' => $pwd,
 			);
+
+			print_r($data);die;
 			$this->db->insert('users', $data);
 			$lastid = $this->db->insert_id();
 			$this->insert_user_details($lastid, $form_key);
@@ -65,6 +77,7 @@ class Usermodel extends CI_Model
 				'form_key' => $form_key,
 				'password' => $pwd,
 			);
+			print_r($data);die;
 			$this->db->insert('users', $data);
 			$lastid = $this->db->insert_id();
 			$this->insert_user_details($lastid, $form_key);
@@ -291,18 +304,18 @@ class Usermodel extends CI_Model
 		// $query = $this->db->get_where('mainweb_rating', array('c_id' => $this->session->userdata('rr_form_key')));
 		// return $query->result_array();
 
-		$todayDate= date("Y-m-d");
+		$todayDate = date("Y-m-d");
 		$this->db->where(array('c_id' => $this->session->userdata('rr_form_key')));
-        $this->db->like('rated_at', $todayDate);
+		$this->db->like('rated_at', $todayDate);
 		$query = $this->db->get('mainweb_rating');
 		return $query->num_rows();
 	}
 
 	public function get_user_ratings()
 	{
+		$this->db->order_by('rated_at', 'desc');
 		$query = $this->db->get_where('mainweb_rating', array('c_id' => $this->session->userdata('rr_form_key')));
 		return $query->result_array();
-
 	}
 
 	public function all_user_sms()

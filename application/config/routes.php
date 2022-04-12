@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -54,6 +54,7 @@ $route['default_controller'] = 'user';
 $route['/'] = 'user/index';
 $route['login'] = 'user/login';
 $route['register'] = 'user/register';
+$route['name-exist'] = 'user/username_exist';
 $route['support'] = 'user/support';
 $route['logout'] = 'user/logout';
 
